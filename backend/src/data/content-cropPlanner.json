@@ -1,0 +1,80 @@
+{
+  "crops": {
+    "kharif": [
+      {
+        "name": "Paddy",
+        "ta": "நெல்",
+        "soil": "Clay / Loamy",
+        "water": "High",
+        "days": "120–150",
+        "gains": "Adds organic matter",
+        "next": "Wheat / Pulses",
+        "tip": "Avoid water stress during tillering",
+        "emoji": "🌾"
+      },
+      {
+        "name": "Maize",
+        "ta": "சோளம்",
+        "soil": "Well drained",
+        "water": "Medium",
+        "days": "90–110",
+        "gains": "Improves soil tilth",
+        "next": "Potato / Pulses",
+        "tip": "Ensure weed control in first 30 days",
+        "emoji": "🌽"
+      }
+    ],
+    "rabi": [
+      {
+        "name": "Wheat",
+        "ta": "கோதுமை",
+        "soil": "Loam",
+        "water": "Medium",
+        "days": "120–140",
+        "gains": "Moderate residue",
+        "next": "Paddy / Maize",
+        "tip": "Avoid late sowing",
+        "emoji": "🌾"
+      }
+    ],
+    "summer": [
+      {
+        "name": "Watermelon",
+        "ta": "தர்பூஸ்",
+        "soil": "Sandy loam",
+        "water": "Medium",
+        "days": "80–95",
+        "gains": "Covers soil surface",
+        "next": "Pulses",
+        "tip": "Needs high sunlight",
+        "emoji": "🍉"
+      }
+    ]
+  },
+  "seasons": [
+    {
+      "id": "kharif",
+      "emoji": "🌧️",
+      "labelEn": "Kharif",
+      "subEn": "Jun – Oct",
+      "labelTa": "காரிப்",
+      "subTa": "ஜூன்–அக்"
+    },
+    {
+      "id": "rabi",
+      "emoji": "❄️",
+      "labelEn": "Rabi",
+      "subEn": "Nov – Feb",
+      "labelTa": "ரபி",
+      "subTa": "நவ்–பிப்"
+    },
+    {
+      "id": "summer",
+      "emoji": "☀️",
+      "labelEn": "Summer",
+      "subEn": "Mar – May",
+      "labelTa": "கோடை",
+      "subTa": "மார்–மே"
+    }
+  ]
+}

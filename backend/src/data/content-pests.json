@@ -1,0 +1,57 @@
+[
+  {
+    "nameEn": "Stem Borer",
+    "nameTa": "தண்டு துளைப்பான்",
+    "emoji": "🐛",
+    "symptoms": "Dead heart in young plants, white ear in mature plants",
+    "symptomsTa": "இளம் தாவரங்களில் இறந்த மையம், முதிர்ந்தவற்றில் வெள்ளை கதிர்",
+    "treatment": "Apply Carbofuran 3G or use light traps",
+    "treatmentTa": "கார்போஃபுரான் 3G தெளி அல்லது ஒளி பொறி வைக்கவும்",
+    "severity": "high",
+    "crop": "Paddy"
+  },
+  {
+    "nameEn": "Aphids",
+    "nameTa": "அட்டைப் பூச்சி",
+    "emoji": "🪲",
+    "symptoms": "Curling of leaves, sticky honeydew, sooty mold",
+    "symptomsTa": "இலைகள் சுருண்டல், பிசுக்கு, கறுப்பு அச்சு",
+    "treatment": "Spray neem oil (5ml/L) or release ladybird beetles",
+    "treatmentTa": "வேம்பெண்ணெய் 5ml/L தெளி அல்லது முட்டைக்கோஸ் வண்டுகளை விடவும்",
+    "severity": "medium",
+    "crop": "Vegetables"
+  },
+  {
+    "nameEn": "Fall Armyworm",
+    "nameTa": "வீழ்ச்சி படையெடுப்பு புழு",
+    "emoji": "🐌",
+    "symptoms": "Irregular windowing of leaves, frass presence",
+    "symptomsTa": "இலைகளில் ஒழுங்கற்ற துளைகள், மலம் காணப்படும்",
+    "treatment": "Apply Spinetoram or Spinosad. Use pheromone traps",
+    "treatmentTa": "ஸ்பின்டோரம் அல்லது ஸ்பினோசாட் தெளி. ஃபெரோமோன் பொறி வையுங்கள்",
+    "severity": "high",
+    "crop": "Maize"
+  },
+  {
+    "nameEn": "Whitefly",
+    "nameTa": "வெள்ளை ஈ",
+    "emoji": "🦟",
+    "symptoms": "Yellowing of leaves, sticky substance under leaf",
+    "symptomsTa": "இலை மஞ்சளாவது, இலை அடியில் பிசுக்கு",
+    "treatment": "Yellow sticky traps + neem extract spray",
+    "treatmentTa": "மஞ்சள் ஒட்டும் பொறி + வேம்பெண்ணெய் தெளி",
+    "severity": "medium",
+    "crop": "Cotton"
+  },
+  {
+    "nameEn": "Leaf Rust",
+    "nameTa": "இலை துரு",
+    "emoji": "🍂",
+    "symptoms": "Orange pustules on leaves, premature defoliation",
+    "symptomsTa": "இலைகளில் ஆரஞ்சு நிற கொப்புளங்கள், இலை உதிர்வு",
+    "treatment": "Spray Propiconazole 25EC at 0.1%",
+    "treatmentTa": "புரோபிகோனசோல் 25EC 0.1% தெளி",
+    "severity": "medium",
+    "crop": "Wheat"
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "categories": [
+    "All",
+    "Farming",
+    "Fertilizer",
+    "Irrigation",
+    "Pest Control"
+  ],
+  "items": [
+    {
+      "titleEn": "Intro to Natural Farming",
+      "titleTa": "இயற்கை விவசாயம் அறிமுகம்",
+      "link": "https://www.youtube.com/embed/G0B-m7vV4fA",
+      "duration": "12:34",
+      "views": "2.4M",
+      "category": "Farming",
+      "emoji": "🌿"
+    },
+    {
+      "titleEn": "Organic Fertilizer Guide",
+      "titleTa": "உரம் தயாரிப்பு",
+      "link": "https://www.youtube.com/embed/q6ioP1L1QZI",
+      "duration": "08:22",
+      "views": "1.1M",
+      "category": "Fertilizer",
+      "emoji": "🧪"
+    },
+    {
+      "titleEn": "Water Saving Methods",
+      "titleTa": "நீர் சேமிப்பு முறைகள்",
+      "link": "https://www.youtube.com/embed/VI5jz7wKZ2o",
+      "duration": "15:10",
+      "views": "850K",
+      "category": "Irrigation",
+      "emoji": "💧"
+    }
+  ]
+}

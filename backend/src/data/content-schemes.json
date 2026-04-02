@@ -1,0 +1,74 @@
+[
+  {
+    "id": "pm",
+    "emoji": "🌾",
+    "nameEn": "PM-Kisan",
+    "nameTa": "PM-Kisan",
+    "descEn": "₹6,000 per year direct income support to all farmer families",
+    "descTa": "அனைத்து விவசாய குடும்பங்களுக்கும் ஆண்டுக்கு ₹6,000 நேரடி வருமான உதவி",
+    "link": "https://pmkisan.gov.in",
+    "tag": "Income",
+    "color": "#EBF4FF",
+    "tagColor": "#2F80ED"
+  },
+  {
+    "id": "pmfby",
+    "emoji": "🛡️",
+    "nameEn": "PMFBY",
+    "nameTa": "PMFBY (பயிர் காப்பீடு)",
+    "descEn": "Low premium crop insurance for protection against natural calamities",
+    "descTa": "இயற்கை பேரிடர்களிலிருந்து பாதுகாப்பு – குறைந்த பிரீமியம் பயிர் காப்பீடு",
+    "link": "https://pmfby.gov.in",
+    "tag": "Insurance",
+    "color": "#FEF9C3",
+    "tagColor": "#92400E"
+  },
+  {
+    "id": "soil",
+    "emoji": "🌱",
+    "nameEn": "Soil Health Card",
+    "nameTa": "மண் ஆரோக்கிய அட்டை",
+    "descEn": "Free soil testing and personalized fertilizer recommendations",
+    "descTa": "இலவச மண் பரிசோதனை மற்றும் தனிப்பயன் உர பரிந்துரை",
+    "link": "https://soilhealth.dac.gov.in",
+    "tag": "Free",
+    "color": "#D1FAE5",
+    "tagColor": "#065F46"
+  },
+  {
+    "id": "pmksy",
+    "emoji": "💧",
+    "nameEn": "PMKSY",
+    "nameTa": "நுண் நீர்ப்பாசனம் (PMKSY)",
+    "descEn": "Subsidies on drip and sprinkler irrigation systems",
+    "descTa": "டிரிப் & ஸ்பிரிங்க்லர் நீர்ப்பாசன மானியம்",
+    "link": "https://pmksy.gov.in",
+    "tag": "Subsidy",
+    "color": "#EBF4FF",
+    "tagColor": "#1D4ED8"
+  },
+  {
+    "id": "pkvy",
+    "emoji": "🌿",
+    "nameEn": "PKVY (Organic)",
+    "nameTa": "இயற்கை விவசாயம் (PKVY)",
+    "descEn": "Financial support for transitioning to organic farming",
+    "descTa": "இயற்கை விவசாயத்திற்கு மாறுவதற்கு நிதி உதவி",
+    "link": "https://pgsindia-ncof.gov.in",
+    "tag": "Organic",
+    "color": "#D1FAE5",
+    "tagColor": "#065F46"
+  },
+  {
+    "id": "kcc",
+    "emoji": "🏦",
+    "nameEn": "Kisan Credit Card",
+    "nameTa": "கிசான் கிரெடிட் கார்டு",
+    "descEn": "Low-interest crop loans up to ₹3 lakh for eligible farmers",
+    "descTa": "தகுதியான விவசாயிகளுக்கு ₹3 லட்சம் வரை குறைந்த வட்டி கடன்",
+    "link": "https://www.myscheme.gov.in",
+    "tag": "Loan",
+    "color": "#FEE2E2",
+    "tagColor": "#DC2626"
+  }
+]
