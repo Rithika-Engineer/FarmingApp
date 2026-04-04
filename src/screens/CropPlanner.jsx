@@ -1,232 +1,270 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLanguage } from "../LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import Layout from "../components/Layout";
-import { CheckCircle2, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Sparkles } from "lucide-react";
 import { api } from "../lib/api";
+const districtProfiles = {
+  Chennai: { weather: "Hot", best: "Vegetables", price: 3200 },
+  Kancheepuram: { weather: "Warm", best: "Paddy", price: 2500 },
+  Tiruvallur: { weather: "Cloudy", best: "Groundnut", price: 6200 },
+  Vellore: { weather: "Dry", best: "Millets", price: 4100 },
+  Tiruvannamalai: { weather: "Sunny", best: "Groundnut", price: 6000 },
+  Villupuram: { weather: "Warm", best: "Sugarcane", price: 3400 },
+  Cuddalore: { weather: "Humid", best: "Paddy", price: 2450 },
+  Salem: { weather: "Dry Heat", best: "Sesame", price: 7800 },
+  Namakkal: { weather: "Warm", best: "Turmeric", price: 8700 },
+  Erode: { weather: "Warm", best: "Turmeric", price: 9500 },
+  Tiruppur: { weather: "Dry", best: "Cotton", price: 6800 },
+  Coimbatore: { weather: "Sunny", best: "Banana", price: 3200 },
+  Nilgiris: { weather: "Cool", best: "Tea", price: 12000 },
+  Dindigul: { weather: "Warm", best: "Onion", price: 2200 },
+  Madurai: { weather: "Hot", best: "Cotton", price: 6400 },
+  Theni: { weather: "Pleasant", best: "Grapes", price: 9000 },
+  Sivaganga: { weather: "Dry", best: "Millets", price: 4200 },
+  Ramanathapuram: { weather: "Dry", best: "Groundnut", price: 6100 },
+  Virudhunagar: { weather: "Hot", best: "Chilli", price: 8500 },
+  Tirunelveli: { weather: "Warm", best: "Banana", price: 3300 },
+  Thoothukudi: { weather: "Coastal", best: "Cotton", price: 6200 },
+  Kanyakumari: { weather: "Humid", best: "Rubber", price: 9800 },
+  Trichy: { weather: "Warm", best: "Paddy", price: 2500 },
+  Karur: { weather: "Dry", best: "Sesame", price: 7600 },
+  Perambalur: { weather: "Warm", best: "Maize", price: 2400 },
+  Ariyalur: { weather: "Dry", best: "Groundnut", price: 6200 },
+  Thanjavur: { weather: "Light Rain", best: "Paddy", price: 2400 },
+  Tiruvarur: { weather: "Wet", best: "Paddy", price: 2450 },
+  Nagapattinam: { weather: "Coastal", best: "Paddy", price: 2480 },
+  Mayiladuthurai: { weather: "Humid", best: "Paddy", price: 2460 },
+  Pudukkottai: { weather: "Dry", best: "Groundnut", price: 6150 },
+  Dharmapuri: { weather: "Warm", best: "Mango", price: 7000 },
+  Krishnagiri: { weather: "Warm", best: "Mango", price: 7200 },
+  Ranipet: { weather: "Warm", best: "Paddy", price: 2500 },
+  Tenkasi: { weather: "Pleasant", best: "Banana", price: 3350 },
+};
 
 const fallbackCrops = {
   kharif: [
-    { name: "Paddy", ta: "நெல்", soil: "Clay / Loamy", water: "High", days: "120–150", gains: "Adds organic matter", next: "Wheat / Pulses", tip: "Avoid water stress during tillering", emoji: "🌾" },
-    { name: "Maize", ta: "சோளம்", soil: "Well drained", water: "Medium", days: "90–110", gains: "Improves soil tilth", next: "Potato / Pulses", tip: "Ensure weed control in first 30 days", emoji: "🌽" },
-    { name: "Cotton", ta: "பருத்தி", soil: "Black soil", water: "Medium", days: "150–180", gains: "Deep root improves soil", next: "Groundnut", tip: "Avoid excess nitrogen", emoji: "🪴" },
-    { name: "Groundnut", ta: "வேர்க்கடலை", soil: "Sandy loam", water: "Low", days: "100–120", gains: "Fixes nitrogen", next: "Maize / Sorghum", tip: "Good drainage required", emoji: "🥜" },
-    { name: "Soybean", ta: "சோயாபீன்", soil: "Clay loam", water: "Medium", days: "90–110", gains: "High nitrogen fixing", next: "Wheat", tip: "Do not waterlog", emoji: "🫘" },
+    {
+      name: "Paddy", ta: "நெல்", soil: "Clay / Loamy", water: "High", days: 135,
+      gains: "Adds organic matter", next: "Wheat / Pulses", tip: "Avoid water stress during tillering",
+      emoji: "🌾", yield: 25, price: 2400,
+      pests: "Stem borer risk after 30 days",
+      fert: ["Day 10 Jeevamrutham", "Day 30 Neem cake"],
+      calendar: ["Day 1 Sowing", "Day 135 Harvest"],
+      previous: 36000,
+    },
+    {
+      name: "Maize", ta: "சோளம்", soil: "Well drained", water: "Medium", days: 100,
+      gains: "Improves soil tilth", next: "Potato", tip: "Weed control in first 30 days",
+      emoji: "🌽", yield: 18, price: 2200,
+      pests: "Fall armyworm",
+      fert: ["Day 12 Compost tea"],
+      calendar: ["Day 1 Sowing", "Day 100 Harvest"],
+      previous: 28000,
+    },
+    {
+      name: "Cotton", ta: "பருத்தி", soil: "Black soil", water: "Medium", days: 160,
+      gains: "Improves organic residue", next: "Groundnut", tip: "Avoid waterlogging",
+      emoji: "🌿", yield: 12, price: 7000,
+      pests: "Whitefly",
+      fert: ["Day 20 Vermicompost"],
+      calendar: ["Day 1 Sowing", "Day 160 Harvest"],
+      previous: 50000,
+    },
+    {
+      name: "Groundnut", ta: "வேர்க்கடலை", soil: "Sandy", water: "Low", days: 110,
+      gains: "Nitrogen fixation", next: "Paddy", tip: "Good drainage required",
+      emoji: "🥜", yield: 14, price: 6500,
+      pests: "Leaf miner",
+      fert: ["Day 10 Panchagavya"],
+      calendar: ["Day 1 Sowing", "Day 110 Harvest"],
+      previous: 42000,
+    },
   ],
+
   rabi: [
-    { name: "Wheat", ta: "கோதுமை", soil: "Loam", water: "Medium", days: "120–140", gains: "Moderate residue", next: "Paddy / Maize", tip: "Avoid late sowing", emoji: "🌾" },
-    { name: "Mustard", ta: "கடுகு", soil: "Loam", water: "Low", days: "100–120", gains: "Improves structure", next: "Pulses", tip: "Needs cool dry weather", emoji: "🌿" },
-    { name: "Peas", ta: "பட்டாணி", soil: "Light loam", water: "Low", days: "90–110", gains: "Fixes nitrogen", next: "Wheat / Maize", tip: "Avoid water stagnation", emoji: "🫛" },
-    { name: "Garlic", ta: "வெள்ளை பூண்டு", soil: "Loose soil", water: "Medium", days: "150–180", gains: "Light feeder", next: "Vegetables", tip: "Needs well-aerated soil", emoji: "🧄" },
+    {
+      name: "Wheat", ta: "கோதுமை", soil: "Loam", water: "Medium", days: 125,
+      gains: "Moderate residue", next: "Paddy", tip: "Avoid late sowing",
+      emoji: "🌾", yield: 20, price: 2600,
+      pests: "Aphid",
+      fert: ["Day 15 Vermicompost"],
+      calendar: ["Day 1 Sowing", "Day 125 Harvest"],
+      previous: 30000,
+    },
+    {
+      name: "Potato", ta: "உருளைக்கிழங்கு", soil: "Loamy", water: "Medium", days: 95,
+      gains: "Soil loosening", next: "Onion",
+      tip: "Avoid blight moisture",
+      emoji: "🥔", yield: 30, price: 1600,
+      pests: "Late blight",
+      fert: ["Day 15 Compost"],
+      calendar: ["Day 1 Sowing", "Day 95 Harvest"],
+      previous: 38000,
+    },
+    {
+      name: "Onion", ta: "வெங்காயம்", soil: "Loamy", water: "Medium", days: 110,
+      gains: "Improves market value", next: "Garlic",
+      tip: "Thrips monitoring",
+      emoji: "🧅", yield: 25, price: 1800,
+      pests: "Thrips",
+      fert: ["Day 12 Neem cake"],
+      calendar: ["Day 1 Nursery", "Day 110 Harvest"],
+      previous: 35000,
+    },
   ],
+
   summer: [
-    { name: "Watermelon", ta: "தர்பூஸ்", soil: "Sandy loam", water: "Medium", days: "80–95", gains: "Covers soil surface", next: "Pulses", tip: "Needs high sunlight", emoji: "🍉" },
-    { name: "Cowpea", ta: "தட்டைப் பயறு", soil: "Any", water: "Low", days: "70–90", gains: "High nitrogen fixing", next: "Cereals", tip: "Very heat tolerant", emoji: "🌱" },
-    { name: "Green gram", ta: "பாசிப்பயறு", soil: "Light soil", water: "Low", days: "60–75", gains: "Restores soil", next: "Wheat", tip: "Good for drylands", emoji: "🫘" },
-    { name: "Sesame", ta: "எள்ளு", soil: "Well drained", water: "Low", days: "90–110", gains: "Deep roots loosen soil", next: "Vegetables", tip: "Avoid heavy rains", emoji: "🌿" },
+    {
+      name: "Watermelon", ta: "தர்பூஸ்", soil: "Sandy loam", water: "Medium", days: 85,
+      gains: "Covers soil", next: "Cowpea", tip: "Needs high sunlight",
+      emoji: "🍉", yield: 3000, price: 18,
+      pests: "Fruit fly",
+      fert: ["Day 10 Panchagavya"],
+      calendar: ["Day 1 Sowing", "Day 85 Harvest"],
+      previous: 42000,
+    },
+    {
+      name: "Tomato", ta: "தக்காளி", soil: "Loamy", water: "Medium", days: 90,
+      gains: "High profit", next: "Chilli", tip: "Needs support sticks",
+      emoji: "🍅", yield: 2200, price: 22,
+      pests: "Whitefly",
+      fert: ["Day 12 Neem cake"],
+      calendar: ["Day 1 Nursery", "Day 90 Harvest"],
+      previous: 46000,
+    },
+    {
+      name: "Chilli", ta: "மிளகாய்", soil: "Red soil", water: "Low", days: 100,
+      gains: "Good export value", next: "Brinjal",
+      tip: "Thrips monitoring",
+      emoji: "🌶️", yield: 1500, price: 35,
+      pests: "Thrips",
+      fert: ["Day 15 Panchagavya"],
+      calendar: ["Day 1 Transplant", "Day 100 Harvest"],
+      previous: 48000,
+    },
+    {
+      name: "Okra", ta: "வெண்டை", soil: "Sandy", water: "Medium", days: 65,
+      gains: "Quick harvest", next: "Pumpkin",
+      tip: "Weekly picking",
+      emoji: "🥒", yield: 1200, price: 28,
+      pests: "Jassids",
+      fert: ["Day 10 Compost tea"],
+      calendar: ["Day 1 Sowing", "Day 65 Harvest"],
+      previous: 30000,
+    },
   ],
 };
 
-const fallbackSeasons = [
-  { id: "kharif", emoji: "🌧️", labelEn: "Kharif", subEn: "Jun – Oct", labelTa: "காரிப்", subTa: "ஜூன்–அக்" },
-  { id: "rabi", emoji: "❄️", labelEn: "Rabi", subEn: "Nov – Feb", labelTa: "ரபி", subTa: "நவ்–பிப்" },
-  { id: "summer", emoji: "☀️", labelEn: "Summer", subEn: "Mar – May", labelTa: "கோடை", subTa: "மார்–மே" },
+const seasons = [
+  { id: "kharif", label: "Kharif", emoji: "🌧️" },
+  { id: "rabi", label: "Rabi", emoji: "❄️" },
+  { id: "summer", label: "Summer", emoji: "☀️" },
 ];
-
-const waterColors = { High: "#DBEAFE", Medium: "#D1FAE5", Low: "#FEF9C3" };
-const waterText = { High: "#1D4ED8", Medium: "#065F46", Low: "#92400E" };
 
 export default function CropPlanner() {
   const { lang } = useLanguage();
   const t = lang === "ta";
   const [season, setSeason] = useState("");
+  const [district, setDistrict] = useState("Thanjavur");
   const [expanded, setExpanded] = useState(null);
   const [crops, setCrops] = useState(fallbackCrops);
-  const [seasons, setSeasons] = useState(fallbackSeasons);
+  const [aiPick, setAiPick] = useState("");
 
   useEffect(() => {
     async function loadPlanner() {
       try {
         const data = await api.get("/content/cropPlanner");
         setCrops(data.crops || fallbackCrops);
-        setSeasons(data.seasons || fallbackSeasons);
       } catch {
         setCrops(fallbackCrops);
-        setSeasons(fallbackSeasons);
       }
     }
     loadPlanner();
   }, []);
 
   const list = crops[season] || [];
+  const districtInfo = districtProfiles[district];
+
+  const recommended = useMemo(() => {
+    if (!season) return null;
+    return districtInfo?.best || list[0]?.name;
+  }, [season, district, list, districtInfo]);
 
   return (
     <Layout title={t ? "பயிர் திட்டமிடல்" : "Crop Planner"}>
-      <div style={{ padding: "16px 16px 0" }}>
+      <div style={{ padding: 16 }}>
+        <div style={{ marginBottom: 16 }}>
+          <label style={{ fontWeight: 700 }}>📍 {t ? "மாவட்டம்" : "District"}</label>
+          <select value={district} onChange={(e) => setDistrict(e.target.value)} style={{ width: "100%", marginTop: 8, padding: 12, borderRadius: 12 }}>
+            {Object.keys(districtProfiles).map((d) => <option key={d}>{d}</option>)}
+          </select>
+        </div>
 
-        {/* Season Selector */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{ marginBottom: 20 }}
-        >
-          <p style={{ fontSize: 13, fontWeight: 700, color: "#6B7280", marginBottom: 10, textTransform: "uppercase", letterSpacing: 0.4 }}>
-            {t ? "பருவகாலம் தேர்வு" : "Growing Season"}
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
-            {seasons.map(({ id, emoji, labelEn, subEn, labelTa, subTa }) => {
-              const active = season === id;
-              return (
-                <motion.button
-                  key={id}
-                  whileTap={{ scale: 0.93 }}
-                  onClick={() => { setSeason(id); setExpanded(null); }}
-                  style={{
-                    padding: "12px 8px",
-                    borderRadius: 16, border: active ? "none" : "1.5px solid #E5E7EB",
-                    background: active ? "linear-gradient(135deg, #2F80ED, #27AE60)" : "#fff",
-                    cursor: "pointer",
-                    boxShadow: active ? "0 6px 20px rgba(47,128,237,0.35)" : "0 2px 6px rgba(0,0,0,0.05)",
-                    textAlign: "center",
-                  }}
-                >
-                  <div style={{ fontSize: 24, marginBottom: 4 }}>{emoji}</div>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: active ? "#fff" : "#111827", marginBottom: 2 }}>
-                    {t ? labelTa : labelEn}
-                  </p>
-                  <p style={{ fontSize: 10, color: active ? "rgba(255,255,255,0.75)" : "#9CA3AF" }}>
-                    {t ? subTa : subEn}
-                  </p>
-                </motion.button>
-              );
-            })}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 16 }}>
+          {seasons.map((s) => (
+            <button key={s.id} onClick={() => { setSeason(s.id); setExpanded(null); }} style={{ padding: 12, borderRadius: 14, border: "1px solid #ddd", background: season === s.id ? "#dff7e8" : "#fff" }}>
+              {s.emoji} {s.label}
+            </button>
+          ))}
+        </div>
+
+        {season && (
+          <div style={{ background: "#fff", borderRadius: 16, padding: 16, marginBottom: 16 }}>
+            <p>🌦 {t ? "தற்போதைய வானிலை" : "Current Weather"}: <b>{districtInfo.weather}</b></p>
+            <p>🤖 {t ? "சிறந்த பரிந்துரை" : "Best Recommendation"}: <b>{recommended}</b></p>
+            <button onClick={() => setAiPick(recommended)} style={{ marginTop: 10, padding: 10, borderRadius: 12 }}>
+              <Sparkles size={16} /> {t ? "AI சிறந்த பயிர்" : "AI Best Crop"}
+            </button>
+            {aiPick && <p style={{ marginTop: 10 }}>✅ {aiPick}</p>}
           </div>
-        </motion.div>
+        )}
 
-        {/* Crop List */}
-        {list.length > 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: "#6B7280", marginBottom: 10, textTransform: "uppercase", letterSpacing: 0.4 }}>
-              {t ? "பரிந்துரைத்த பயிர்கள்" : "Recommended Crops"}
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {list.map((c, i) => {
-                const open = expanded === i;
-                return (
-                  <motion.div
-                    key={c.name}
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.06 }}
-                    style={{
-                      background: "#fff",
-                      borderRadius: 18,
-                      boxShadow: "0 4px 16px rgba(0,0,0,0.07)",
-                      border: open ? "1.5px solid #2F80ED" : "1px solid #E5E7EB",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <button
-                      onClick={() => setExpanded(open ? null : i)}
-                      style={{
-                        width: "100%", padding: "14px 16px",
-                        display: "flex", alignItems: "center", gap: 12,
-                        background: "none", border: "none", cursor: "pointer",
-                        textAlign: "left",
-                      }}
-                    >
-                      <div style={{
-                        width: 44, height: 44, borderRadius: 14,
-                        background: "linear-gradient(135deg, #EBF4FF, #EDFBF1)",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: 22, flexShrink: 0,
-                      }}>
-                        {c.emoji}
-                      </div>
-                      <div style={{ flex: 1 }}>
-                        <p style={{ fontSize: 15, fontWeight: 700, color: "#111827" }}>
-                          {t ? c.ta : c.name}
-                        </p>
-                        <p style={{ fontSize: 12, color: "#6B7280" }}>
-                          📆 {c.days} days · 🌱 {c.soil}
-                        </p>
-                      </div>
-                      <div style={{
-                        width: 28, height: 28, borderRadius: 8,
-                        background: open ? "#EBF4FF" : "#F3F4F6",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                      }}>
-                        {open ? <ChevronUp size={14} color="#2F80ED" /> : <ChevronDown size={14} color="#6B7280" />}
-                      </div>
-                    </button>
+        {list.map((c, i) => {
+          const open = expanded === i;
+          const expected = c.yield * c.price;
+          const improvement = Math.round(((expected - c.previous) / c.previous) * 100);
+          return (
+            <div key={c.name} style={{ background: "#fff", borderRadius: 16, marginBottom: 12, overflow: "hidden", border: "1px solid #eee" }}>
+              <button onClick={() => setExpanded(open ? null : i)} style={{ width: "100%", padding: 14, display: "flex", justifyContent: "space-between", background: "none", border: "none" }}>
+                <span>{c.emoji} {t ? c.ta : c.name}</span>
+                {open ? <ChevronUp /> : <ChevronDown />}
+              </button>
 
-                    <AnimatePresence>
-                      {open && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.28 }}
-                          style={{ overflow: "hidden" }}
-                        >
-                          <div style={{ padding: "0 16px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
-                            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                              <span style={{
-                                padding: "4px 10px", borderRadius: 20,
-                                background: waterColors[c.water] || "#F3F4F6",
-                                color: waterText[c.water] || "#374151",
-                                fontSize: 12, fontWeight: 600,
-                              }}>
-                                💧 {t ? "நீர்" : "Water"}: {c.water}
-                              </span>
-                              <span style={{ padding: "4px 10px", borderRadius: 20, background: "#F3F4F6", color: "#374151", fontSize: 12, fontWeight: 600 }}>
-                                📆 {c.days} days
-                              </span>
-                            </div>
-                            {[
-                              { label: t ? "மண்ணுக்கு பயன்" : "Soil Benefit", val: c.gains, icon: "🌱" },
-                              { label: t ? "அடுத்து விதைக்கலாம்" : "Next Crop", val: c.next, icon: "🔁" },
-                            ].map(({ label, val, icon }) => (
-                              <div key={label} style={{ background: "#F7F9FC", borderRadius: 12, padding: "10px 12px" }}>
-                                <p style={{ fontSize: 11, fontWeight: 700, color: "#6B7280", marginBottom: 3, textTransform: "uppercase", letterSpacing: 0.3 }}>
-                                  {icon} {label}
-                                </p>
-                                <p style={{ fontSize: 13, color: "#374151", fontWeight: 500 }}>{val}</p>
-                              </div>
-                            ))}
-                            <div style={{
-                              background: "linear-gradient(135deg, #EBF4FF, #EDFBF1)",
-                              borderRadius: 12, padding: "10px 12px",
-                              border: "1px solid #BFDBFE",
-                            }}>
-                              <p style={{ fontSize: 11, fontWeight: 700, color: "#1D4ED8", marginBottom: 3, textTransform: "uppercase", letterSpacing: 0.3 }}>
-                                💡 {t ? "லாப அறிவுரை" : "Pro Tip"}
-                              </p>
-                              <p style={{ fontSize: 13, color: "#1E40AF", fontWeight: 500 }}>{c.tip}</p>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+              <AnimatePresence>
+                {open && (
+                  <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} style={{ overflow: "hidden" }}>
+                    <div style={{ padding: 16, display: "grid", gap: 10 }}>
+                      <p>🌱 Soil: {c.soil}</p>
+                      <p>💧 Water: {c.water}</p>
+                      <p>📆 Duration: {c.days} days</p>
+                      <p>🐛 Pest Risk: {c.pests}</p>
+                      <p>💰 Expected Profit: ₹{expected.toLocaleString()}</p>
+                      <p>📊 Previous Season: ₹{c.previous.toLocaleString()} ({improvement >= 0 ? "⬆" : "⬇"} {improvement}%)</p>
+
+                      <div>
+                        <b>🧪 Fertilizer Schedule</b>
+                        {c.fert.map((f) => <div key={f}>• {f}</div>)}
+                      </div>
+
+                      <div>
+                        <b>📅 Crop Calendar</b>
+                        {c.calendar.map((step) => <div key={step}>• {step}</div>)}
+                      </div>
+
+                      <div>
+                        <b>🔁 Smart Rotation</b>
+                        <div>• {c.next}</div>
+                        <div>• Pulses</div>
+                        <div>• Sesame</div>
+                      </div>
+                    </div>
                   </motion.div>
-                );
-              })}
+                )}
+              </AnimatePresence>
             </div>
-          </motion.div>
-        )}
-
-        {!season && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            style={{ textAlign: "center", padding: "40px 20px", color: "#9CA3AF" }}
-          >
-            <div style={{ fontSize: 48, marginBottom: 12 }}>🗓️</div>
-            <p style={{ fontSize: 14 }}>
-              {t ? "பருவகாலம் தேர்வு செய்து பயிர் பட்டியலை காணுங்கள்" : "Select a season above to view crop recommendations"}
-            </p>
-          </motion.div>
-        )}
-
+          );
+        })}
       </div>
     </Layout>
   );
