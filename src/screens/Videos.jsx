@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "../LanguageContext";
 import { motion } from "framer-motion";
 import Layout from "../components/Layout";
-import { PlayCircle, Clock, Eye } from "lucide-react";
+import { PlayCircle, Clock, Eye, ExternalLink } from "lucide-react";
 import { api } from "../lib/api";
 
 const fallbackVideos = [
   {
     titleEn: "Intro to Natural Farming",
     titleTa: "இயற்கை விவசாயம் அறிமுகம்",
-    link: "https://www.youtube.com/embed/G0B-m7vV4fA",
+    link: "https://www.youtube.com/watch?v=SZgyIwy84ew",
     duration: "12:34",
     views: "2.4M",
     category: "Farming",
@@ -18,7 +18,7 @@ const fallbackVideos = [
   {
     titleEn: "Organic Fertilizer Guide",
     titleTa: "உரம் தயாரிப்பு",
-    link: "https://www.youtube.com/embed/q6ioP1L1QZI",
+    link: "https://www.youtube.com/watch?v=GwX3ViZpvLM",
     duration: "08:22",
     views: "1.1M",
     category: "Fertilizer",
@@ -27,7 +27,7 @@ const fallbackVideos = [
   {
     titleEn: "Water Saving Methods",
     titleTa: "நீர் சேமிப்பு முறைகள்",
-    link: "https://www.youtube.com/embed/VI5jz7wKZ2o",
+    link: "https://www.youtube.com/watch?v=hXvkuNS-oj8",
     duration: "15:10",
     views: "850K",
     category: "Irrigation",
@@ -35,34 +35,49 @@ const fallbackVideos = [
   },
 ];
 
-const fallbackCategories = ["All", "Farming", "Fertilizer", "Irrigation", "Pest Control"];
+const fallbackCategories = [
+  "All",
+  "Farming",
+  "Fertilizer",
+  "Irrigation",
+  "Pest Control",
+];
 
 export default function Videos() {
   const { lang } = useLanguage();
   const t = lang === "ta";
+
   const [videos, setVideos] = useState(fallbackVideos);
   const [categories, setCategories] = useState(fallbackCategories);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [failedEmbeds, setFailedEmbeds] = useState({});
 
-  function toEmbedUrl(url) {
-    if (!url) return "";
-    if (url.includes("youtube.com/embed/")) return url;
-
+  function getVideoId(url) {
     try {
       const parsed = new URL(url);
+
       if (parsed.hostname.includes("youtu.be")) {
-        const id = parsed.pathname.replace("/", "");
-        return id ? `https://www.youtube.com/embed/${id}` : url;
+        return parsed.pathname.replace("/", "");
       }
+
       if (parsed.hostname.includes("youtube.com")) {
-        const id = parsed.searchParams.get("v");
-        return id ? `https://www.youtube.com/embed/${id}` : url;
+        return parsed.searchParams.get("v");
       }
-      return url;
+
+      if (url.includes("/embed/")) {
+        return url.split("/embed/")[1].split("?")[0];
+      }
+
+      return "";
     } catch {
-      return url;
+      return "";
     }
+  }
+
+  function toEmbedUrl(url) {
+    const id = getVideoId(url);
+    return id
+      ? `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`
+      : "";
   }
 
   useEffect(() => {
@@ -79,138 +94,122 @@ export default function Videos() {
     loadVideos();
   }, []);
 
-  const filteredVideos = selectedCategory === "All"
-    ? videos
-    : videos.filter((v) => v.category === selectedCategory);
+  const filteredVideos =
+    selectedCategory === "All"
+      ? videos
+      : videos.filter((v) => v.category === selectedCategory);
 
   return (
     <Layout title={t ? "கற்றல் வீடியோக்கள்" : "Learning Videos"}>
-      <div style={{ padding: "16px 16px 0" }}>
-
-        {/* Category Filter */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{ marginBottom: 16 }}
-        >
-          <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 4 }} className="scrollbar-hide">
-            {categories.map((cat, i) => (
-              <motion.button
-                key={cat}
-                initial={{ opacity: 0, scale: 0.85 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.04 }}
-                onClick={() => setSelectedCategory(cat)}
-                style={{
-                  flexShrink: 0,
-                  padding: "6px 14px",
-                  borderRadius: 20,
-                  background: selectedCategory === cat ? "linear-gradient(135deg, #2F80ED, #27AE60)" : "#fff",
-                  border: selectedCategory === cat ? "none" : "1.5px solid #E5E7EB",
-                  color: selectedCategory === cat ? "#fff" : "#374151",
-                  fontSize: 12, fontWeight: 600, cursor: "pointer",
-                  boxShadow: selectedCategory === cat ? "0 4px 12px rgba(47,128,237,0.3)" : "none",
-                }}
-              >
-                {cat}
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Video Cards */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {filteredVideos.map((v, i) => (
-            <motion.div
-              key={`${v.titleEn}-${i}`}
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.08 + i * 0.1 }}
+      <div style={{ padding: "16px 16px 20px" }}>
+        {/* Categories */}
+        <div style={{ display: "flex", gap: 8, overflowX: "auto", marginBottom: 16 }}>
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
               style={{
-                background: "#fff",
+                padding: "8px 14px",
                 borderRadius: 20,
-                overflow: "hidden",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-                border: "1px solid #E5E7EB",
+                border: "none",
+                whiteSpace: "nowrap",
+                background:
+                  selectedCategory === cat
+                    ? "linear-gradient(135deg,#2F80ED,#27AE60)"
+                    : "#fff",
+                color: selectedCategory === cat ? "#fff" : "#111",
+                fontWeight: 600,
               }}
             >
-              {/* Thumbnail / Embed */}
-              <div style={{ position: "relative", paddingTop: "56.25%", background: "#F3F4F6" }}>
-                {!failedEmbeds[`${v.titleEn}-${i}`] ? (
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Videos */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          {filteredVideos.map((v, i) => {
+            const embedUrl = toEmbedUrl(v.link);
+
+            return (
+              <motion.div
+                key={`${v.titleEn}-${i}`}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{
+                  background: "#fff",
+                  borderRadius: 20,
+                  overflow: "hidden",
+                  boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+                }}
+              >
+                {/* Video */}
+                <div
+                  style={{
+                    position: "relative",
+                    paddingTop: "56.25%",
+                    background: "#F3F4F6",
+                  }}
+                >
                   <iframe
-                    src={toEmbedUrl(v.link)}
+                    src={embedUrl}
+                    title={v.titleEn}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
                     style={{
-                      position: "absolute", top: 0, left: 0,
-                      width: "100%", height: "100%",
+                      position: "absolute",
+                      inset: 0,
+                      width: "100%",
+                      height: "100%",
                       border: "none",
                     }}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                    loading="lazy"
-                    title={v.titleEn}
-                    onError={() => {
-                      setFailedEmbeds((prev) => ({ ...prev, [`${v.titleEn}-${i}`]: true }));
-                    }}
                   />
-                ) : (
+
+                  {/* Click to open YouTube */}
                   <a
                     href={v.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
-                      position: "absolute", inset: 0,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      gap: 8, color: "#2F80ED", fontWeight: 700, textDecoration: "none",
+                      position: "absolute",
+                      bottom: 10,
+                      right: 10,
+                      background: "rgba(0,0,0,0.65)",
+                      color: "#fff",
+                      padding: "8px 12px",
+                      borderRadius: 20,
+                      display: "flex",
+                      gap: 6,
+                      alignItems: "center",
+                      textDecoration: "none",
+                      fontSize: 12,
+                      fontWeight: 700,
                     }}
                   >
-                    <PlayCircle size={20} />
-                    {t ? "வீடியோ திறக்க" : "Open Video"}
+                    <ExternalLink size={14} />
+                    {t ? "திறக்க" : "Open"}
                   </a>
-                )}
-              </div>
+                </div>
 
-              {/* Card Details */}
-              <div style={{ padding: "14px 16px" }}>
-                <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                  <div style={{
-                    width: 36, height: 36, borderRadius: 10,
-                    background: "linear-gradient(135deg, #EBF4FF, #EDFBF1)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    flexShrink: 0, fontSize: 18,
-                  }}>
-                    {v.emoji}
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: 14, fontWeight: 700, color: "#111827", marginBottom: 4, lineHeight: 1.3 }}>
-                      {t ? v.titleTa : v.titleEn}
-                    </p>
-                    <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                      <span style={{
-                        padding: "2px 8px", borderRadius: 20,
-                        background: "#EBF4FF", color: "#2F80ED",
-                        fontSize: 10, fontWeight: 700,
-                      }}>
-                        {v.category}
-                      </span>
-                      <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 11, color: "#9CA3AF" }}>
-                        <Clock size={10} /> {v.duration}
-                      </span>
-                      <span style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 11, color: "#9CA3AF" }}>
-                        <Eye size={10} /> {v.views}
-                      </span>
-                    </div>
+                {/* Details */}
+                <div style={{ padding: 16 }}>
+                  <p style={{ fontWeight: 700, marginBottom: 8 }}>
+                    {v.emoji} {t ? v.titleTa : v.titleEn}
+                  </p>
+
+                  <div style={{ display: "flex", gap: 12, fontSize: 12, color: "#6B7280" }}>
+                    <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                      <Clock size={12} /> {v.duration}
+                    </span>
+                    <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                      <Eye size={12} /> {v.views}
+                    </span>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-          {filteredVideos.length === 0 && (
-            <div style={{ textAlign: "center", color: "#6B7280", fontSize: 13, padding: "12px 0 20px" }}>
-              {t ? "இந்த வகையில் வீடியோக்கள் இல்லை" : "No videos available for this category"}
-            </div>
-          )}
+              </motion.div>
+            );
+          })}
         </div>
-
       </div>
     </Layout>
   );

@@ -1,0 +1,59 @@
+{
+  "contacts": [
+    {
+      "icon": "📞",
+      "titleEn": "Farmer Helpline",
+      "titleTa": "விவசாயி ஹெல்ப்லைன்",
+      "number": "1800-180-1551",
+      "tel": "18001801551",
+      "descEn": "Free call • 24/7 • All crops & schemes",
+      "descTa": "இலவச அழைப்பு • 24/7 • அனைத்து சேவைகளும்",
+      "color": "#EBF4FF",
+      "btnColor": "#2F80ED"
+    },
+    {
+      "icon": "🏛️",
+      "titleEn": "District Agriculture Office",
+      "titleTa": "மாவட்ட விவசாய அலுவலகம்",
+      "number": "1967",
+      "tel": "1967",
+      "descEn": "Contact local agriculture officers near you",
+      "descTa": "உங்கள் பகுதி விவசாய அதிகாரிகளை தொடர்பு கொள்ளுங்கள்",
+      "color": "#EDFBF1",
+      "btnColor": "#27AE60"
+    },
+    {
+      "icon": "🌾",
+      "titleEn": "KISAN Call Centre",
+      "titleTa": "கிசான் அழைப்பு மையம்",
+      "number": "1551",
+      "tel": "1551",
+      "descEn": "Crop advice & market info in Tamil",
+      "descTa": "தமிழில் பயிர் ஆலோசனை மற்றும் சந்தை தகவல்",
+      "color": "#FEF9C3",
+      "btnColor": "#92400E"
+    }
+  ],
+  "menuOptions": [
+    {
+      "num": "1",
+      "en": "Weather Info",
+      "ta": "வானிலை தகவல்"
+    },
+    {
+      "num": "2",
+      "en": "Natural Farming Guide",
+      "ta": "இயற்கை வேளாண்மை ஆலோசனை"
+    },
+    {
+      "num": "3",
+      "en": "Market Prices",
+      "ta": "சந்தை விலை"
+    },
+    {
+      "num": "4",
+      "en": "Government Schemes",
+      "ta": "அரசு திட்டங்கள்"
+    }
+  ]
+}

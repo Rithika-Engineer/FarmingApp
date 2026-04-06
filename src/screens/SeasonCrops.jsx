@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLanguage } from "../LanguageContext";
 import Layout from "../components/Layout";
-import { Volume2 } from "lucide-react";
-import { api } from "../lib/api";
 
 const fallbackCropNameTa = {
   Paddy: "நெல்",
-  Maize: "சோளம்",
+  Maize: "மக்காச்சோளம்",
   Groundnut: "நிலக்கடலை",
   Cotton: "பருத்தி",
   Soybean: "சோயாபீன்",
@@ -21,51 +19,216 @@ const fallbackCropNameTa = {
   Cowpea: "தட்டைப் பயறு",
 };
 
+
 const fallbackCropData = {
   Paddy: {
-    soil: "Clay / Loamy",
-    water: "High",
+    soil: { en: "Clay / Loamy", ta: "களிமண் / கலப்பு மண்" },
+    water: { en: "High", ta: "அதிகம்" },
     days: "120–150",
-    next: "Pulses / Sesame",
     emoji: "🌾",
-    speakEn: "Paddy requires high water. Ensure proper irrigation.",
-    speakTa: "நெல் பயிருக்கு அதிக நீர் தேவைப்படுகிறது.",
+    whyBest: {
+      en: "Best for Kharif because high rainfall and standing water improve tillering and grain filling.",
+      ta: "அதிக மழை மற்றும் நீர் தேக்கம் நெல் வளர்ச்சிக்கு மிகவும் உகந்தது.",
+    },
+    whyOthersLess: {
+      en: "Cotton and chilli require better drainage and less water.",
+      ta: "பருத்தி மற்றும் மிளகாய் குறைந்த நீர் மற்றும் நல்ல வடிகால் தேவை.",
+    },
   },
+
   Maize: {
-    soil: "Well drained",
-    water: "Medium",
+    soil: { en: "Well drained", ta: "நன்றாக வடிகால் மண்" },
+    water: { en: "Medium", ta: "மிதமான" },
     days: "90–110",
-    next: "Green gram",
     emoji: "🌽",
-    speakEn: "Maize is a high income crop.",
-    speakTa: "சோளம் நல்ல வருமானம் தரும் பயிர்.",
+    whyBest: {
+      en: "Fast growing crop with strong market demand.",
+      ta: "வேகமாக வளரும் மற்றும் சந்தை தேவை அதிகம்.",
+    },
+    whyOthersLess: {
+      en: "Paddy needs more water.",
+      ta: "நெல் அதிக நீர் தேவைப்படும்.",
+    },
   },
+
   Groundnut: {
-    soil: "Sandy loam",
-    water: "Low",
-    days: "100–120",
-    next: "Rice / Maize",
+    soil: { en: "Sandy Loam", ta: "மணற்பான்மை கலப்பு மண்" },
+    water: { en: "Medium", ta: "மிதமான" },
+    days: "100–110",
     emoji: "🥜",
-    speakEn: "Groundnut fixes nitrogen.",
-    speakTa: "நிலக்கடலை நைட்ரஜன் நிர்ணயிக்கும்.",
+    whyBest: {
+      en: "Excellent oilseed crop for sandy soil and moderate heat.",
+      ta: "மணற்பான்மை மண்ணில் மற்றும் மிதமான வெப்பத்தில் சிறந்த எண்ணெய் விதை பயிர்.",
+    },
+    whyOthersLess: {
+      en: "Paddy requires more water.",
+      ta: "நெல் அதிக நீர் தேவைப்படும்.",
+    },
   },
-  Wheat: {
-    soil: "Loam",
-    water: "Medium",
+
+  Cotton: {
+    soil: { en: "Black Soil", ta: "கருப்பு மண்" },
+    water: { en: "Medium", ta: "மிதமான" },
+    days: "150–170",
+    emoji: "🧵",
+    whyBest: {
+      en: "Best in black soil with moderate rainfall.",
+      ta: "கருப்பு மண்ணிலும் மிதமான மழையிலும் சிறந்தது.",
+    },
+    whyOthersLess: {
+      en: "Short duration crops give less profit.",
+      ta: "குறுகிய கால பயிர்கள் குறைந்த லாபம் தரும்.",
+    },
+  },
+
+  Soybean: {
+    soil: { en: "Loamy", ta: "கலப்பு மண்" },
+    water: { en: "Medium", ta: "மிதமான" },
+    days: "95–110",
+    emoji: "🫘",
+    whyBest: {
+      en: "Profitable oilseed crop with nitrogen fixing benefit.",
+      ta: "நைட்ரஜன் சேர்க்கும் திறன் கொண்ட லாபகரமான எண்ணெய் விதை பயிர்.",
+    },
+    whyOthersLess: {
+      en: "Water-heavy crops reduce yield.",
+      ta: "அதிக நீர் பயிர்கள் விளைச்சலை குறைக்கும்.",
+    },
+  },
+
+  Chilli: {
+    soil: { en: "Red Soil", ta: "சிவப்பு மண்" },
+    water: { en: "Low", ta: "குறைவு" },
     days: "120–140",
-    next: "Paddy / Maize",
-    emoji: "🌾",
-    speakEn: "Wheat needs timely sowing.",
-    speakTa: "கோதுமை சரியான நேரத்தில் விதைக்க வேண்டும்.",
+    emoji: "🌶️",
+    whyBest: {
+      en: "High market demand and drought tolerance.",
+      ta: "சந்தை தேவை அதிகம் மற்றும் வறட்சியை தாங்கும்.",
+    },
+    whyOthersLess: {
+      en: "Paddy needs high water.",
+      ta: "நெல் அதிக நீர் தேவைப்படும்.",
+    },
   },
+
+  Wheat: {
+    soil: { en: "Loam", ta: "கலப்பு மண்" },
+    water: { en: "Medium", ta: "மிதமான" },
+    days: "120–140",
+    emoji: "🌾",
+    whyBest: {
+      en: "Cool Rabi climate supports grain formation.",
+      ta: "குளிரான ரபி காலநிலை தானிய உருவாக்கத்திற்கு உதவும்.",
+    },
+    whyOthersLess: {
+      en: "Summer crops fail in winter cold.",
+      ta: "கோடை பயிர்கள் குளிரில் வளரவியலாது.",
+    },
+  },
+
+  Mustard: {
+    soil: { en: "Sandy", ta: "மணல் மண்" },
+    water: { en: "Low", ta: "குறைவு" },
+    days: "100–110",
+    emoji: "🌼",
+    whyBest: {
+      en: "Best winter oilseed crop.",
+      ta: "சிறந்த குளிர்கால எண்ணெய் விதை பயிர்.",
+    },
+    whyOthersLess: {
+      en: "Heavy water crops lose yield.",
+      ta: "அதிக நீர் பயிர்கள் விளைச்சல் குறையும்.",
+    },
+  },
+
+  Onion: {
+    soil: { en: "Loamy", ta: "கலப்பு மண்" },
+    water: { en: "Medium", ta: "மிதமான" },
+    days: "90–110",
+    emoji: "🧅",
+    whyBest: {
+      en: "Strong winter market crop.",
+      ta: "குளிர்காலத்தில் நல்ல சந்தை மதிப்பு.",
+    },
+    whyOthersLess: {
+      en: "Rain-heavy crops not suitable.",
+      ta: "அதிக மழை பயிர்கள் பொருத்தமில்லை.",
+    },
+  },
+
+  Peas: {
+    soil: { en: "Loamy", ta: "கலப்பு மண்" },
+    water: { en: "Low", ta: "குறைவு" },
+    days: "90–100",
+    emoji: "🫛",
+    whyBest: {
+      en: "Short duration winter profit crop.",
+      ta: "குறுகிய கால குளிர்கால லாப பயிர்.",
+    },
+    whyOthersLess: {
+      en: "Long crops delay next season.",
+      ta: "நீண்டகால பயிர்கள் அடுத்த பருவத்தை தாமதப்படுத்தும்.",
+    },
+  },
+
   Watermelon: {
-    soil: "Sandy loam",
-    water: "Medium",
+    soil: { en: "Sandy loam", ta: "மணற்பான்மை கலப்பு மண்" },
+    water: { en: "Medium", ta: "மிதமான" },
     days: "80–95",
-    next: "Pulses",
     emoji: "🍉",
-    speakEn: "Watermelon needs high sunlight.",
-    speakTa: "தர்பூசணிக்கு அதிக வெயில் தேவை.",
+    whyBest: {
+      en: "High summer sunlight improves sweetness.",
+      ta: "கோடை வெயில் இனிப்பை அதிகரிக்கும்.",
+    },
+    whyOthersLess: {
+      en: "Water-loving crops lose yield in heat.",
+      ta: "அதிக நீர் பயிர்கள் வெயிலில் குறையும்.",
+    },
+  },
+
+  Sesame: {
+    soil: { en: "Sandy", ta: "மணல் மண்" },
+    water: { en: "Low", ta: "குறைவு" },
+    days: "85–95",
+    emoji: "🌱",
+    whyBest: {
+      en: "Highly heat tolerant oilseed crop.",
+      ta: "வெப்பத்தை தாங்கும் சிறந்த எண்ணெய் விதை பயிர்.",
+    },
+    whyOthersLess: {
+      en: "Other crops need more irrigation.",
+      ta: "மற்ற பயிர்களுக்கு அதிக பாசனம் தேவை.",
+    },
+  },
+
+  "Green gram": {
+    soil: { en: "Loamy", ta: "கலப்பு மண்" },
+    water: { en: "Low", ta: "குறைவு" },
+    days: "65–75",
+    emoji: "🟢",
+    whyBest: {
+      en: "Short duration pulse crop improves soil nitrogen.",
+      ta: "குறுகிய கால பயிர் மண்ணில் நைட்ரஜனை அதிகரிக்கும்.",
+    },
+    whyOthersLess: {
+      en: "Long crops reduce summer efficiency.",
+      ta: "நீண்ட பயிர்கள் கோடை பயன்திறனை குறைக்கும்.",
+    },
+  },
+
+  Cowpea: {
+    soil: { en: "Sandy", ta: "மணல் மண்" },
+    water: { en: "Low", ta: "குறைவு" },
+    days: "70–80",
+    emoji: "🫘",
+    whyBest: {
+      en: "Fast summer crop with soil fertility improvement.",
+      ta: "மண் வளத்தை மேம்படுத்தும் வேகமான கோடை பயிர்.",
+    },
+    whyOthersLess: {
+      en: "Heavy water crops are less suitable.",
+      ta: "அதிக நீர் பயிர்கள் பொருத்தமில்லை.",
+    },
   },
 };
 
@@ -73,27 +236,21 @@ const fallbackSeasonMeta = {
   kharif: {
     emoji: "🌧️",
     labelEn: "Kharif",
-    labelTa: "காரிப்",
-    crops: ["Paddy", "Maize", "Groundnut", "Cotton", "Soybean", "Chilli"],
+    labelTa: "காரிஃப்",
+    crops: ["Paddy", "Maize"],
   },
   rabi: {
     emoji: "❄️",
     labelEn: "Rabi",
     labelTa: "ரபி",
-    crops: ["Wheat", "Mustard", "Onion", "Peas"],
+    crops: ["Wheat", "Mustard"],
   },
   summer: {
     emoji: "☀️",
     labelEn: "Summer",
     labelTa: "கோடை",
-    crops: ["Watermelon", "Sesame", "Green gram", "Cowpea"],
+    crops: ["Watermelon", "Sesame"],
   },
-};
-
-const seasonMonths = {
-  kharif: "Jun – Oct",
-  rabi: "Nov – Feb",
-  summer: "Mar – May",
 };
 
 export default function SeasonCrops() {
@@ -101,153 +258,102 @@ export default function SeasonCrops() {
   const t = lang === "ta";
 
   const [season, setSeason] = useState("kharif");
-  const [crop, setCrop] = useState(null);
-  const [cropNameTa, setCropNameTa] = useState(fallbackCropNameTa);
-  const [cropData, setCropData] = useState(fallbackCropData);
-  const [seasonMeta, setSeasonMeta] = useState(fallbackSeasonMeta);
+  const [crop, setCrop] = useState("Paddy");
 
-  useEffect(() => {
-    async function loadSeasonData() {
-      try {
-        const data = await api.get("/content/seasonCrops");
-        setCropNameTa(data.cropNameTa || fallbackCropNameTa);
-        setCropData(data.cropData || fallbackCropData);
-        setSeasonMeta(data.seasonMeta || fallbackSeasonMeta);
-      } catch {
-        setCropNameTa(fallbackCropNameTa);
-        setCropData(fallbackCropData);
-        setSeasonMeta(fallbackSeasonMeta);
-      }
-    }
-
-    loadSeasonData();
-
-    const m = new Date().getMonth() + 1;
-    if (m >= 6 && m <= 10) setSeason("kharif");
-    else if (m >= 11 || m <= 2) setSeason("rabi");
-    else setSeason("summer");
-  }, []);
-
-  function speak(c) {
-    const info = cropData[c];
-    if (!info) return;
-
-    const msg = new SpeechSynthesisUtterance(
-      t ? info.speakTa : info.speakEn
-    );
-    msg.lang = t ? "ta-IN" : "en-US";
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(msg);
-  }
+  const cropData = fallbackCropData[crop];
 
   return (
-    <Layout title={t ? "பருவகால பயிர்கள்" : "Season Crops"}>
-      <div style={{ padding: "16px 16px 0" }}>
-        {/* Season Tabs */}
-        <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
-          {Object.entries(seasonMeta).map(([key, meta]) => (
+    <Layout title={t ? "பருவ பயிர்கள்" : "Season Crops"}>
+      <div style={{ padding: 18, background: "#F8FAFC", minHeight: "100vh" }}>
+        <div style={{ display: "flex", gap: 10, marginBottom: 18 }}>
+          {Object.entries(fallbackSeasonMeta).map(([key, meta]) => (
             <button
               key={key}
               onClick={() => {
                 setSeason(key);
-                setCrop(null);
+                setCrop(meta.crops[0]);
               }}
               style={{
                 flex: 1,
-                padding: 10,
-                borderRadius: 14,
+                padding: 14,
+                borderRadius: 18,
                 border: "none",
-                color: season === key ? "#fff" : "#222",
+                color: season === key ? "#fff" : "#111",
                 background:
                   season === key
-                    ? "linear-gradient(135deg,#2F80ED,#27AE60)"
+                    ? "linear-gradient(135deg,#3B82F6,#10B981)"
                     : "#fff",
+                boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+                fontWeight: 700,
               }}
             >
-              {meta.emoji}
-              <div>{t ? meta.labelTa : meta.labelEn}</div>
+              {meta.emoji} {t ? meta.labelTa : meta.labelEn}
             </button>
           ))}
         </div>
 
-        {/* Season Info Banner */}
-        <div
-          style={{
-            background: "#fff",
-            borderRadius: 16,
-            padding: 14,
-            marginBottom: 16,
-            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-          }}
-        >
-          <p>
-            📅 Current Season:{" "}
-            <b>{t ? seasonMeta[season].labelTa : seasonMeta[season].labelEn}</b>
-          </p>
-          <p>
-            🗓 Months: <b>{seasonMonths[season]}</b>
-          </p>
-          <p>
-            🌾 Total Crops: <b>{seasonMeta[season].crops.length}</b>
-          </p>
-          <p>
-            ⭐ Best Crop: <b>{seasonMeta[season].crops[0]}</b>
-          </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+          {fallbackSeasonMeta[season].crops.map((c) => (
+            <button
+              key={c}
+              onClick={() => setCrop(c)}
+              style={{
+                borderRadius: 999,
+                padding: "10px 16px",
+                border: crop === c ? "2px solid #16A34A" : "1px solid #ddd",
+                background: crop === c ? "#ECFDF5" : "#fff",
+                fontWeight: 600,
+              }}
+            >
+              {(fallbackCropData[c]?.emoji || "🌾")}{" "}
+              {t ? fallbackCropNameTa[c] || c : c}
+            </button>
+          ))}
         </div>
 
-        {/* ✅ UPDATED CHIP BUTTON UI */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 10,
-            marginBottom: 16,
-          }}
-        >
-          {seasonMeta[season].crops.map((c) => {
-            const info = cropData[c];
-            const active = crop === c;
-
-            return (
-              <button
-                key={c}
-                onClick={() => setCrop(c)}
-                style={{
-                  border: active ? "2px solid #27AE60" : "1px solid #ddd",
-                  background: active ? "#f6fff8" : "#fff",
-                  borderRadius: 999,
-                  padding: "10px 14px",
-                  fontWeight: 600,
-                  fontSize: 14,
-                }}
-              >
-                {info?.emoji || "🌾"} {t ? cropNameTa[c] || c : c}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Crop Detail */}
-        {crop && cropData[crop] && (
+        {crop && cropData && (
           <div
             style={{
               background: "#fff",
-              marginTop: 16,
-              padding: 16,
-              borderRadius: 16,
+              marginTop: 18,
+              padding: 20,
+              borderRadius: 22,
+              boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
             }}
           >
-            <h3>
-              {cropData[crop].emoji} {t ? cropNameTa[crop] : crop}
-            </h3>
-            <p>🌱 Soil: {cropData[crop].soil}</p>
-            <p>💧 Water: {cropData[crop].water}</p>
-            <p>📆 Days: {cropData[crop].days}</p>
-            <p>🔁 Next: {cropData[crop].next}</p>
+            <h2>
+              {cropData.emoji} {t ? fallbackCropNameTa[crop] || crop : crop}
+            </h2>
 
-            <button onClick={() => speak(crop)} style={{ marginTop: 10 }}>
-              <Volume2 size={16} />
-            </button>
+            <div style={{ display: "grid", gap: 8 }}>
+              <p>🌱 {t ? "மண்" : "Soil"}: {t ? cropData.soil.ta : cropData.soil.en}</p>
+              <p>💧 {t ? "நீர்" : "Water"}: {t ? cropData.water.ta : cropData.water.en}</p>
+              <p>📆 {t ? "நாட்கள்" : "Days"}: {cropData.days}</p>
+            </div>
+
+            <div
+              style={{
+                background: "#ECFDF5",
+                padding: 14,
+                borderRadius: 16,
+                marginTop: 14,
+              }}
+            >
+              <p><b>{t ? "✅ ஏன் சிறந்தது?" : "✅ Why Best?"}</b></p>
+              <p>{t ? cropData.whyBest.ta : cropData.whyBest.en}</p>
+            </div>
+
+            <div
+              style={{
+                background: "#FEF2F2",
+                padding: 14,
+                borderRadius: 16,
+                marginTop: 14,
+              }}
+            >
+              <p><b>{t ? "⚠️ ஏன் மற்றவை குறைவு?" : "⚠️ Why Others Less Suitable?"}</b></p>
+              <p>{t ? cropData.whyOthersLess.ta : cropData.whyOthersLess.en}</p>
+            </div>
           </div>
         )}
       </div>

@@ -30,165 +30,165 @@ const commonDocsTa = [
 
 const fallbackSchemes = [
   {
-    id: "pm",
+    id: "pmkisan",
     emoji: "🌾",
+    color: "#E0F2FE",
     nameEn: "PM-Kisan",
     nameTa: "பிஎம் கிசான்",
-    descEn: "₹6,000 yearly direct farmer income support",
-    descTa: "ஆண்டுக்கு ₹6,000 நேரடி வருமான உதவி",
-    benefitEn: "Direct DBT support",
-    benefitTa: "நேரடி DBT உதவி",
+    descEn: "₹6,000 per year direct income support to all farmer families",
+    descTa: "ஆண்டுக்கு ₹6,000 நேரடி உதவி",
+    startDate: "01 Jan 2026",
+    endDate: "31 Dec 2026",
+    subsidy: "₹6,000 / year",
     categoryEn: "Income Support",
     categoryTa: "வருமான உதவி",
-    subsidy: "₹6,000",
-    applyModeEn: "Online",
-    applyModeTa: "ஆன்லைன்",
+    benefitEn: "Direct bank transfer support",
+    benefitTa: "நேரடி வங்கி உதவி",
+    applyModeEn: "Online / CSC",
+    applyModeTa: "ஆன்லைன் / CSC",
+    applicableForEn: ["All farmer families", "Small farmers"],
+    applicableForTa: ["அனைத்து விவசாயிகள்", "சிறு விவசாயிகள்"],
+    documentsEn: [...commonDocsEn],
+    documentsTa: [...commonDocsTa],
     link: "https://pmkisan.gov.in",
-    color: "#EBF4FF",
-    documentsEn: [...commonDocsEn, "DBT enabled bank account"],
-    documentsTa: [...commonDocsTa, "DBT வங்கி கணக்கு"],
-    startDate: "01 Apr 2026",
-    endDate: "30 Jun 2026",
-    applicableForEn: ["Small farmers", "Marginal farmers"],
-    applicableForTa: ["சிறு விவசாயிகள்", "சிறிய நில விவசாயிகள்"],
   },
   {
     id: "pmfby",
     emoji: "🛡️",
-    nameEn: "PMFBY Crop Insurance",
-    nameTa: "பயிர் காப்பீடு",
-    descEn: "Insurance against crop loss and natural disasters",
-    descTa: "பயிர் இழப்பு மற்றும் இயற்கை பேரிடர் காப்பீடு",
-    benefitEn: "Crop loss protection",
-    benefitTa: "பயிர் இழப்பு பாதுகாப்பு",
+    color: "#FEF3C7",
+    nameEn: "PMFBY",
+    nameTa: "பிஎம் பயிர் காப்பீடு",
+    descEn: "Low premium crop insurance for protection against natural calamities",
+    descTa: "குறைந்த கட்டண பயிர் காப்பீடு",
+    startDate: "01 Jun 2026",
+    endDate: "31 Jul 2026",
+    subsidy: "2% Premium",
     categoryEn: "Insurance",
     categoryTa: "காப்பீடு",
-    subsidy: "2% Premium",
-    applyModeEn: "Online / Bank",
-    applyModeTa: "ஆன்லைன் / வங்கி",
-    link: "https://pmfby.gov.in",
-    color: "#FEF9C3",
-    documentsEn: [...commonDocsEn, "Crop sowing proof"],
-    documentsTa: [...commonDocsTa, "விதைப்பு சான்று"],
-    startDate: "15 May 2026",
-    endDate: "31 Jul 2026",
+    benefitEn: "Crop loss protection",
+    benefitTa: "பயிர் இழப்பு பாதுகாப்பு",
+    applyModeEn: "Bank / Online",
+    applyModeTa: "வங்கி / ஆன்லைன்",
     applicableForEn: ["All crop farmers"],
-    applicableForTa: ["அனைத்து விவசாயிகள்"],
+    applicableForTa: ["அனைத்து பயிர் விவசாயிகள்"],
+    documentsEn: [...commonDocsEn, "Crop Details"],
+    documentsTa: [...commonDocsTa, "பயிர் விவரம்"],
+    link: "https://pmfby.gov.in",
   },
   {
     id: "soil",
     emoji: "🌱",
+    color: "#D1FAE5",
     nameEn: "Soil Health Card",
     nameTa: "மண் ஆரோக்கிய அட்டை",
-    descEn: "Free soil testing and fertilizer recommendation",
+    descEn: "Free soil testing and personalized fertilizer recommendations",
     descTa: "இலவச மண் பரிசோதனை",
-    benefitEn: "Better fertilizer usage",
-    benefitTa: "சரியான உர பயன்பாடு",
-    categoryEn: "Soil",
-    categoryTa: "மண்",
-    subsidy: "Free",
-    applyModeEn: "Offline",
-    applyModeTa: "ஆஃப்லைன்",
-    link: "https://soilhealth.dac.gov.in",
-    color: "#D1FAE5",
-    documentsEn: [...commonDocsEn, "Soil sample"],
-    documentsTa: [...commonDocsTa, "மண் மாதிரி"],
     startDate: "Always Open",
-    endDate: "No End",
+    endDate: "No Last Date",
+    subsidy: "Free",
+    categoryEn: "Soil Health",
+    categoryTa: "மண் ஆரோக்கியம்",
+    benefitEn: "Better fertilizer planning",
+    benefitTa: "சரியான உர திட்டம்",
+    applyModeEn: "Offline / Agri Office",
+    applyModeTa: "ஆஃப்லைன் / வேளாண்மை அலுவலகம்",
     applicableForEn: ["All farmers"],
     applicableForTa: ["அனைத்து விவசாயிகள்"],
+    documentsEn: [...commonDocsEn, "Soil Sample"],
+    documentsTa: [...commonDocsTa, "மண் மாதிரி"],
+    link: "https://soilhealth.dac.gov.in",
   },
-  {
+   {
     id: "pmksy",
     emoji: "💧",
-    nameEn: "PMKSY Irrigation",
-    nameTa: "நீர்ப்பாசன மானியம்",
-    descEn: "Drip and sprinkler irrigation subsidy",
-    descTa: "டிரிப் மற்றும் ஸ்பிரிங்க்ளர் மானியம்",
-    benefitEn: "Water saving",
-    benefitTa: "நீர் சேமிப்பு",
-    categoryEn: "Irrigation",
-    categoryTa: "நீர்ப்பாசனம்",
-    subsidy: "55%",
-    applyModeEn: "Online",
-    applyModeTa: "ஆன்லைன்",
-    link: "https://pmksy.gov.in",
     color: "#DBEAFE",
+    nameEn: "PMKSY",
+    nameTa: "நீர் பாசன திட்டம்",
+    descEn: "Subsidy for drip and sprinkler irrigation systems",
+    descTa: "டிரிப் மற்றும் ஸ்பிரிங்களர் பாசன மானியம்",
+    startDate: "01 Apr 2026",
+    endDate: "31 Mar 2027",
+    subsidy: "Up to 55%",
+    categoryEn: "Irrigation",
+    categoryTa: "நீர் பாசனம்",
+    benefitEn: "Water saving irrigation support",
+    benefitTa: "நீர் சேமிப்பு பாசன உதவி",
+    applyModeEn: "Online / Agri Office",
+    applyModeTa: "ஆன்லைன் / வேளாண்மை அலுவலகம்",
+    applicableForEn: ["All irrigated farmers"],
+    applicableForTa: ["அனைத்து பாசன விவசாயிகள்"],
     documentsEn: [...commonDocsEn, "Water source proof"],
     documentsTa: [...commonDocsTa, "நீர் ஆதார சான்று"],
-    startDate: "01 Jun 2026",
-    endDate: "31 Dec 2026",
-    applicableForEn: ["Irrigation farmers"],
-    applicableForTa: ["நீர்ப்பாசன விவசாயிகள்"],
+    link: "https://pmksy.gov.in",
   },
   {
     id: "kcc",
-    emoji: "🏦",
+    emoji: "💳",
+    color: "#FCE7F3",
     nameEn: "Kisan Credit Card",
     nameTa: "கிசான் கடன் அட்டை",
-    descEn: "Low-interest agriculture loans",
+    descEn: "Low interest agricultural loan support",
     descTa: "குறைந்த வட்டி விவசாய கடன்",
-    benefitEn: "Easy crop loan",
-    benefitTa: "எளிய கடன்",
-    categoryEn: "Loan",
-    categoryTa: "கடன்",
-    subsidy: "Low Interest",
+    startDate: "Always Open",
+    endDate: "No Last Date",
+    subsidy: "4% Interest",
+    categoryEn: "Farm Loan",
+    categoryTa: "விவசாய கடன்",
+    benefitEn: "Easy crop loan access",
+    benefitTa: "எளிய பயிர் கடன் வசதி",
     applyModeEn: "Bank",
     applyModeTa: "வங்கி",
+    applicableForEn: ["All farmers", "Tenant farmers"],
+    applicableForTa: ["அனைத்து விவசாயிகள்", "குத்தகை விவசாயிகள்"],
+    documentsEn: [...commonDocsEn, "Land cultivation proof"],
+    documentsTa: [...commonDocsTa, "நில சாகுபடி சான்று"],
     link: "https://www.myscheme.gov.in",
-    color: "#FEE2E2",
-    documentsEn: [...commonDocsEn, "Income certificate"],
-    documentsTa: [...commonDocsTa, "வருமான சான்று"],
-    startDate: "Always Open",
-    endDate: "No End",
-    applicableForEn: ["All eligible farmers"],
-    applicableForTa: ["தகுதியான விவசாயிகள்"],
   },
   {
-    id: "mech",
-    emoji: "🚜",
-    nameEn: "Farm Mechanization",
-    nameTa: "விவசாய இயந்திர மானியம்",
-    descEn: "Subsidy for tractors and machinery",
-    descTa: "டிராக்டர் மற்றும் கருவி மானியம்",
-    benefitEn: "Reduce labor cost",
-    benefitTa: "தொழிலாளர் செலவு குறைவு",
-    categoryEn: "Machinery",
-    categoryTa: "இயந்திரம்",
-    subsidy: "40%",
-    applyModeEn: "Online",
-    applyModeTa: "ஆன்லைன்",
-    link: "https://agrimachinery.nic.in",
-    color: "#FCE7F3",
-    documentsEn: [...commonDocsEn, "Machinery quotation"],
-    documentsTa: [...commonDocsTa, "கருவி விலைப்பட்டியல்"],
+    id: "organic",
+    emoji: "🌿",
+    color: "#DCFCE7",
+    nameEn: "Organic Farming Support",
+    nameTa: "இயற்கை விவசாய மானியம்",
+    descEn: "Support for organic inputs and certification",
+    descTa: "இயற்கை உள்ளீடுகள் மற்றும் சான்றிதழ் உதவி",
     startDate: "01 Jul 2026",
     endDate: "31 Dec 2026",
-    applicableForEn: ["Farm owners"],
-    applicableForTa: ["விவசாய நில உரிமையாளர்கள்"],
+    subsidy: "₹20,000 / acre",
+    categoryEn: "Organic Farming",
+    categoryTa: "இயற்கை விவசாயம்",
+    benefitEn: "Organic farming encouragement",
+    benefitTa: "இயற்கை விவசாய ஊக்கம்",
+    applyModeEn: "Agri Office",
+    applyModeTa: "வேளாண்மை அலுவலகம்",
+    applicableForEn: ["Organic farmers"],
+    applicableForTa: ["இயற்கை விவசாயிகள்"],
+    documentsEn: [...commonDocsEn, "Farm input bills"],
+    documentsTa: [...commonDocsTa, "உள்ளீடு ரசீது"],
+    link: "https://pgsindia-ncof.gov.in",
   },
   {
     id: "solar",
     emoji: "☀️",
-    nameEn: "Solar Pump Subsidy",
-    nameTa: "சோலார் மோட்டார் மானியம்",
-    descEn: "Subsidy for solar irrigation pump installation",
-    descTa: "சோலார் பம்ப் அமைப்புக்கு மானியம்",
-    benefitEn: "Electricity cost saving",
-    benefitTa: "மின்சார செலவு சேமிப்பு",
-    categoryEn: "Energy",
-    categoryTa: "ஆற்றல்",
-    subsidy: "60%",
+    color: "#FEF9C3",
+    nameEn: "PM Kusum Solar Pump",
+    nameTa: "சோலார் பம்ப் மானியம்",
+    descEn: "Subsidy for solar irrigation pumps",
+    descTa: "சோலார் பாசன பம்ப் மானியம்",
+    startDate: "01 May 2026",
+    endDate: "31 Aug 2026",
+    subsidy: "Up to 60%",
+    categoryEn: "Solar",
+    categoryTa: "சோலார்",
+    benefitEn: "Free solar irrigation support",
+    benefitTa: "சோலார் பாசன உதவி",
     applyModeEn: "Online",
     applyModeTa: "ஆன்லைன்",
-    link: "https://mnre.gov.in",
-    color: "#FEF3C7",
-    documentsEn: [...commonDocsEn, "Electricity connection proof"],
-    documentsTa: [...commonDocsTa, "மின்சார இணைப்பு சான்று"],
-    startDate: "01 Jun 2026",
-    endDate: "31 Dec 2026",
-    applicableForEn: ["Pump owners", "Irrigation farmers"],
-    applicableForTa: ["பம்ப் உரிமையாளர்கள்", "நீர்ப்பாசன விவசாயிகள்"],
+    applicableForEn: ["Pump set farmers"],
+    applicableForTa: ["பம்ப் செட் விவசாயிகள்"],
+    documentsEn: [...commonDocsEn, "Pump EB connection"],
+    documentsTa: [...commonDocsTa, "மின் இணைப்பு சான்று"],
+    link: "https://pmkusum.mnre.gov.in",
   },
 ];
 
@@ -202,11 +202,25 @@ export default function Schemes() {
     async function loadSchemes() {
       try {
         const data = await api.get("/content/schemes");
-        setSchemes(Array.isArray(data) ? data : fallbackSchemes);
+
+        if (Array.isArray(data)) {
+          const merged = fallbackSchemes.map((fallback) => {
+            const apiScheme = data.find((d) => d.id === fallback.id);
+            return {
+              ...fallback,
+              ...apiScheme,
+            };
+          });
+
+          setSchemes(merged);
+        } else {
+          setSchemes(fallbackSchemes);
+        }
       } catch {
         setSchemes(fallbackSchemes);
       }
     }
+
     loadSchemes();
   }, []);
 
@@ -217,18 +231,49 @@ export default function Schemes() {
           const isOpen = openId === s.id;
 
           return (
-            <div key={s.id} style={{ background: "#fff", borderRadius: 18, boxShadow: "0 4px 16px rgba(0,0,0,0.07)", overflow: "hidden" }}>
+            <div
+              key={s.id}
+              style={{
+                background: "#fff",
+                borderRadius: 18,
+                boxShadow: "0 4px 16px rgba(0,0,0,0.07)",
+                overflow: "hidden",
+              }}
+            >
               <button
                 onClick={() => setOpenId(isOpen ? "" : s.id)}
-                style={{ width: "100%", padding: 16, border: "none", background: "none", display: "flex", gap: 12, alignItems: "center", cursor: "pointer", textAlign: "left" }}
+                style={{
+                  width: "100%",
+                  padding: 16,
+                  border: "none",
+                  background: "none",
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "center",
+                  cursor: "pointer",
+                  textAlign: "left",
+                }}
               >
-                <div style={{ width: 46, height: 46, borderRadius: 14, background: s.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>
+                <div
+                  style={{
+                    width: 46,
+                    height: 46,
+                    borderRadius: 14,
+                    background: s.color,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 22,
+                  }}
+                >
                   {s.emoji}
                 </div>
 
                 <div style={{ flex: 1 }}>
                   <p style={{ fontWeight: 700 }}>{t ? s.nameTa : s.nameEn}</p>
-                  <p style={{ fontSize: 12, color: "#6B7280" }}>{t ? s.descTa : s.descEn}</p>
+                  <p style={{ fontSize: 12, color: "#6B7280" }}>
+                    {t ? s.descTa : s.descEn}
+                  </p>
                 </div>
 
                 {isOpen ? <ChevronUp /> : <ChevronDown />}
@@ -243,19 +288,15 @@ export default function Schemes() {
                   <p><b>🖥 {t ? "விண்ணப்ப முறை" : "Apply Mode"}:</b> {t ? s.applyModeTa : s.applyModeEn}</p>
 
                   <div style={{ marginTop: 14 }}>
-                    <h4 style={{ fontWeight: 800 }}>
-                      👨‍🌾 {t ? "யார் விண்ணப்பிக்கலாம்" : "Who Can Apply"}
-                    </h4>
-                    {(t ? s.applicableForTa : s.applicableForEn).map((a, idx) => (
+                    <h4>👨‍🌾 {t ? "யார் விண்ணப்பிக்கலாம்" : "Who Can Apply"}</h4>
+                    {((t ? s.applicableForTa : s.applicableForEn) || []).map((a, idx) => (
                       <p key={idx}>✅ {a}</p>
                     ))}
                   </div>
 
                   <div style={{ marginTop: 14 }}>
-                    <h4 style={{ fontWeight: 800 }}>
-                      📄 {t ? "தேவையான ஆவணங்கள்" : "Required Documents"}
-                    </h4>
-                    {(t ? s.documentsTa : s.documentsEn).map((doc, idx) => (
+                    <h4>📄 {t ? "தேவையான ஆவணங்கள்" : "Required Documents"}</h4>
+                    {((t ? s.documentsTa : s.documentsEn) || []).map((doc, idx) => (
                       <p key={idx}>📎 {doc}</p>
                     ))}
                   </div>

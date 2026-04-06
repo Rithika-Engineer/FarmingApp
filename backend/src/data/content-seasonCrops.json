@@ -1,0 +1,84 @@
+{
+  "cropNameTa": {
+    "Paddy": "நெல்",
+    "Maize": "சோளம்",
+    "Groundnut": "நிலக்கடலை",
+    "Cotton": "பருத்தி",
+    "Soybean": "சோயாபீன்",
+    "Chilli": "மிளகாய்",
+    "Wheat": "கோதுமை",
+    "Mustard": "கடுகு",
+    "Onion": "வெங்காயம்",
+    "Peas": "பட்டாணி",
+    "Watermelon": "தர்பூசணி",
+    "Sesame": "எள்",
+    "Green gram": "பச்சைப்பயறு",
+    "Cowpea": "தட்டைப் பயறு"
+  },
+  "cropData": {
+    "Paddy": {
+      "soil": "Clay / Loamy",
+      "water": "High",
+      "days": "120–150",
+      "next": "Pulses / Sesame",
+      "emoji": "🌾",
+      "speakEn": "Paddy requires high water. Ensure proper irrigation.",
+      "speakTa": "நெல் பயிருக்கு அதிக நீர் தேவைப்படுகிறது."
+    },
+    "Maize": {
+      "soil": "Well drained",
+      "water": "Medium",
+      "days": "90–110",
+      "next": "Green gram",
+      "emoji": "🌽",
+      "speakEn": "Maize is a high income crop. Ensure weed control.",
+      "speakTa": "சோளம் நல்ல வருமானம் தரும் பயிர்."
+    },
+    "Groundnut": {
+      "soil": "Sandy loam",
+      "water": "Low",
+      "days": "100–120",
+      "next": "Rice / Maize",
+      "emoji": "🥜",
+      "speakEn": "Groundnut fixes nitrogen. Great for rotation.",
+      "speakTa": "நிலக்கடலை நைட்ரஜன் நிர்ணயிக்கும். சுழற்சிக்கு சிறந்தது."
+    }
+  },
+  "seasonMeta": {
+    "kharif": {
+      "emoji": "🌧️",
+      "labelEn": "Kharif",
+      "labelTa": "காரிப்",
+      "crops": [
+        "Paddy",
+        "Maize",
+        "Groundnut",
+        "Cotton",
+        "Soybean",
+        "Chilli"
+      ]
+    },
+    "rabi": {
+      "emoji": "❄️",
+      "labelEn": "Rabi",
+      "labelTa": "ரபி",
+      "crops": [
+        "Wheat",
+        "Mustard",
+        "Onion",
+        "Peas"
+      ]
+    },
+    "summer": {
+      "emoji": "☀️",
+      "labelEn": "Summer",
+      "labelTa": "கோடை",
+      "crops": [
+        "Watermelon",
+        "Sesame",
+        "Green gram",
+        "Cowpea"
+      ]
+    }
+  }
+}

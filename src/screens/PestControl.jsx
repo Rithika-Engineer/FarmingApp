@@ -4,11 +4,19 @@ import { motion } from "framer-motion";
 import Layout from "../components/Layout";
 import { api } from "../lib/api";
 
-// ✅ Local image imports
 import stemBoreImg from "./images/stem bore.jpg";
 import fallArmywormImg from "./images/fallarmyworn image.jpg";
 import fruitFlyImg from "./images/fruit fly image.webp";
 import whiteflyImg from "./images/whitefly pest.jpg";
+import aphidsImg from "./images/aphids.jpg";
+
+const imageMap = {
+  "stem borer": stemBoreImg,
+  "fall armyworm": fallArmywormImg,
+  "fruit fly": fruitFlyImg,
+  whitefly: whiteflyImg,
+  aphids: aphidsImg
+};
 
 const fallbackPests = [
   {
@@ -122,11 +130,27 @@ export default function PestControl() {
     async function loadPests() {
       try {
         const data = await api.get("/content/pests");
-        setPests(data.pests || fallbackPests);
+
+        const safePests = (data.pests || fallbackPests).map((pest) => {
+          const pestName = (
+            pest.nameEn?.trim() ||
+            pest.name?.trim() ||
+            ""
+          ).toLowerCase();
+
+          return {
+            ...pest,
+            preparationSteps: pest.preparationSteps || [],
+            image: imageMap[pestName] || pest.image || stemBoreImg,
+          };
+        });
+
+        setPests(safePests);
       } catch {
         setPests(fallbackPests);
       }
     }
+
     loadPests();
   }, []);
 
@@ -137,109 +161,110 @@ export default function PestControl() {
     if (!file) return;
 
     setSelectedImage(URL.createObjectURL(file));
-    const randomPest = pests[Math.floor(Math.random() * pests.length)];
+
+    const randomPest =
+      pests[Math.floor(Math.random() * pests.length)] || fallbackPests[0];
+
     setDetectedPest(randomPest);
   };
 
-  const renderPestCard = (pest, index) => (
-    <motion.div
-      key={index}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      style={{
-        background: "#fff",
-        borderRadius: 24,
-        overflow: "hidden",
-        marginTop: 20,
-        boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-      }}
-    >
-      <img
-        src={pest.image}
-        alt={pest.nameEn}
+  const renderPestCard = (pest, index) => {
+    const steps = pest.preparationSteps || [];
+
+    return (
+      <motion.div
+        key={index}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         style={{
-          width: "100%",
-          height: 220,
-          objectFit: "cover",
+          background: "#fff",
+          borderRadius: 24,
+          overflow: "hidden",
+          marginTop: 20,
+          boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
         }}
-      />
-
-      <div style={{ padding: 18 }}>
-        <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 8 }}>
-          {pest.emoji} {t ? pest.nameTa : pest.nameEn}
-        </h2>
-
-        <div
+      >
+        <img
+          src={pest.image}
+          alt={pest.nameEn}
           style={{
-            display: "inline-block",
-            padding: "6px 12px",
-            borderRadius: 20,
-            background: "#EEF2FF",
-            marginBottom: 12,
-            fontWeight: 600,
+            width: "100%",
+            height: 220,
+            objectFit: "cover",
           }}
-        >
-          🌾 {pest.crop}
-        </div>
+        />
 
-        <p style={{ marginBottom: 8 }}>
-          <b>⚠ Problem:</b> {t ? pest.symptomsTa : pest.symptoms}
-        </p>
-        <p style={{ marginBottom: 8 }}>
-          <b>🦠 Disease:</b> {t ? pest.diseaseTa : pest.disease}
-        </p>
-        <p style={{ marginBottom: 8 }}>
-          <b>🛡 Prevention:</b> {t ? pest.preventionTa : pest.prevention}
-        </p>
-        <p style={{ marginBottom: 12 }}>
-          <b>🌿 Natural Solution:</b> {t ? pest.treatmentTa : pest.treatment}
-        </p>
+        <div style={{ padding: 18 }}>
+          <h2 style={{ fontSize: 22, fontWeight: 800, marginBottom: 8 }}>
+            {pest.emoji} {t ? pest.nameTa : pest.nameEn}
+          </h2>
 
-        <div
-          style={{
-            background: "linear-gradient(135deg,#ECFDF5,#F0FDF4)",
-            padding: 16,
-            borderRadius: 18,
-          }}
-        >
-          <h4 style={{ marginBottom: 10 }}>🧪 Preparation Steps</h4>
+          <div
+            style={{
+              display: "inline-block",
+              padding: "6px 12px",
+              borderRadius: 20,
+              background: "#EEF2FF",
+              marginBottom: 12,
+              fontWeight: 600,
+            }}
+          >
+            🌾 {pest.crop}
+          </div>
 
-          {pest.preparationSteps.map((step, i) => (
+          <p><b>⚠ Problem:</b> {t ? pest.symptomsTa : pest.symptoms}</p>
+          <p><b>🦠 Disease:</b> {t ? pest.diseaseTa : pest.disease}</p>
+          <p><b>🛡 Prevention:</b> {t ? pest.preventionTa : pest.prevention}</p>
+          <p><b>🌿 Natural Solution:</b> {t ? pest.treatmentTa : pest.treatment}</p>
+
+          {steps.length > 0 && (
             <div
-              key={i}
               style={{
-                display: "flex",
-                gap: 10,
-                marginBottom: 10,
-                alignItems: "start",
+                background: "linear-gradient(135deg,#ECFDF5,#F0FDF4)",
+                padding: 16,
+                borderRadius: 18,
+                marginTop: 14,
               }}
             >
-              <div
-                style={{
-                  minWidth: 26,
-                  height: 26,
-                  borderRadius: "50%",
-                  background: "#16A34A",
-                  color: "#fff",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontWeight: 700,
-                }}
-              >
-                {i + 1}
-              </div>
-              <p style={{ margin: 0 }}>{step}</p>
-            </div>
-          ))}
-        </div>
+              <h4 style={{ marginBottom: 10 }}>🧪 Preparation Steps</h4>
 
-        <p style={{ marginTop: 14 }}>
-          <b>📌 Usage:</b> {t ? pest.usageTa : pest.usage}
-        </p>
-      </div>
-    </motion.div>
-  );
+              {steps.map((step, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    gap: 10,
+                    marginBottom: 10,
+                  }}
+                >
+                  <div
+                    style={{
+                      minWidth: 26,
+                      height: 26,
+                      borderRadius: "50%",
+                      background: "#16A34A",
+                      color: "#fff",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontWeight: 700,
+                    }}
+                  >
+                    {i + 1}
+                  </div>
+                  <p style={{ margin: 0 }}>{step}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <p style={{ marginTop: 14 }}>
+            <b>📌 Usage:</b> {t ? pest.usageTa : pest.usage}
+          </p>
+        </div>
+      </motion.div>
+    );
+  };
 
   return (
     <Layout title={t ? "பூச்சி கலைக்களஞ்சியம்" : "Premium Pest Encyclopedia"}>
@@ -263,7 +288,6 @@ export default function PestControl() {
             fontSize: 16,
             fontWeight: 700,
             background: "linear-gradient(135deg,#2563EB,#16A34A)",
-            boxShadow: "0 8px 20px rgba(37,99,235,0.25)",
             cursor: "pointer",
           }}
         >
@@ -286,7 +310,9 @@ export default function PestControl() {
 
         {detectedPest && (
           <>
-            <h2 style={{ marginTop: 26, fontSize: 24 }}>🤖 AI Detection Result</h2>
+            <h2 style={{ marginTop: 26, fontSize: 24 }}>
+              🤖 AI Detection Result
+            </h2>
             {renderPestCard(detectedPest, "detected")}
           </>
         )}

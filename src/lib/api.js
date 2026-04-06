@@ -1,35 +1,69 @@
-const API_BASE = import.meta.env.VITE_API_BASE || "/api";
+const API_BASE =
+  import.meta.env.VITE_API_BASE || "http://127.0.0.1:5000/api";
 
 async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
-    ...options,
-  });
-
-  let payload = null;
   try {
-    payload = await response.json();
-  } catch {
-    payload = null;
-  }
+    const response = await fetch(`${API_BASE}${path}`, {
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      },
+      ...options,
+    });
 
-  if (!response.ok) {
-    throw new Error(payload?.error || "Request failed");
-  }
+    let payload = null;
 
-  return payload;
+    try {
+      payload = await response.json();
+    } catch {
+      payload = null;
+    }
+
+    // Backend responded but with error status
+    if (!response.ok) {
+      const error = new Error(payload?.error || "Request failed");
+      error.response = {
+        status: response.status,
+        data: payload,
+      };
+      throw error;
+    }
+
+    return payload;
+  } catch (error) {
+    // ✅ Better network error handling
+    if (error.name === "TypeError") {
+      throw new Error(
+        "Unable to connect to backend server. Please make sure backend is running on port 5000."
+      );
+    }
+
+    throw error;
+  }
 }
 
 export const api = {
-  get: (path) => request(path),
-  post: (path, body) =>
-    request(path, {
+  get: async (path) => {
+    return await request(path);
+  },
+
+  post: async (path, body) => {
+    return await request(path, {
       method: "POST",
       body: JSON.stringify(body),
-    }),
-  put: (path, body) =>
-    request(path, {
+    });
+  },
+
+  put: async (path, body) => {
+    return await request(path, {
       method: "PUT",
       body: JSON.stringify(body),
-    }),
+    });
+  },
+
+  delete: async (path) => {
+    return await request(path, {
+      method: "DELETE",
+    });
+  },
 };

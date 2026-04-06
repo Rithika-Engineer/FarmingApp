@@ -138,7 +138,28 @@ export default function Jobs() {
     async function loadJobs() {
       try {
         const data = await api.get("/jobs");
-        setJobs(data.jobs || fallbackJobs);
+
+        if (Array.isArray(data.jobs)) {
+          const mergedJobs = fallbackJobs.map((fallback) => {
+            const apiJob = data.jobs.find(
+              (j) => j.titleEn === fallback.titleEn
+            );
+
+            return {
+              ...fallback,
+              ...apiJob,
+              qualificationEn:
+                apiJob?.qualificationEn || fallback.qualificationEn,
+              qualificationTa:
+                apiJob?.qualificationTa || fallback.qualificationTa,
+              documents: apiJob?.documents || fallback.documents,
+            };
+          });
+
+          setJobs(mergedJobs);
+        } else {
+          setJobs(fallbackJobs);
+        }
       } catch {
         setJobs(fallbackJobs);
       }
@@ -249,6 +270,7 @@ export default function Jobs() {
                         <h4 style={{ marginTop: 10 }}>
                           📄 {t ? "தேவையான ஆவணங்கள்" : "Documents"}
                         </h4>
+
                         {job.documents.map((doc, idx) => (
                           <p key={idx}>
                             <FileCheck size={14} /> {doc}

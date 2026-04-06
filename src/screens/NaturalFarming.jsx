@@ -2,9 +2,23 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "../LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import Layout from "../components/Layout";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { api } from "../lib/api";
 
+
+const cropNames = {
+  paddy: { en: "Paddy", ta: "நெல்" },
+  banana: { en: "Banana", ta: "வாழை" },
+  tomato: { en: "Tomato", ta: "தக்காளி" },
+  groundnut: { en: "Groundnut", ta: "நிலக்கடலை" },
+  cotton: { en: "Cotton", ta: "பருத்தி" },
+  sugarcane: { en: "Sugarcane", ta: "கரும்பு" },
+  maize: { en: "Maize", ta: "மக்காச்சோளம்" },
+  chilli: { en: "Chilli", ta: "மிளகாய்" },
+  brinjal: { en: "Brinjal", ta: "கத்தரிக்காய்" },
+  coconut: { en: "Coconut", ta: "தேங்காய்" },
+  mango: { en: "Mango", ta: "மாம்பழம்" },
+  onion: { en: "Onion", ta: "வெங்காயம்" },
+};
 const fallbackFarmingData = {
   paddy: {
     emoji: "🌾",
@@ -17,45 +31,137 @@ const fallbackFarmingData = {
     safety: { en: "Wear gloves while spraying", ta: "கையுறை அணிந்து தெளிக்கவும்" },
     benefit: { en: "Improves soil fertility and water retention", ta: "மண் வளம் மற்றும் நீர் தக்க வைப்பு உயரும்" },
   },
+
   banana: {
     emoji: "🍌",
     fert: { en: "Panchagavya", ta: "பஞ்சகவ்யம்" },
-    prep: { en: ["Add milk, curd, ghee", "Ferment for 7 days"], ta: ["பால், தயிர், நெய் சேர்க்கவும்", "7 நாட்கள் ஊறவிடவும்"] },
+    prep: {
+      en: ["Add milk, curd, ghee", "Ferment for 7 days", "Dilute before spraying"],
+      ta: ["பால், தயிர், நெய் சேர்க்கவும்", "7 நாட்கள் ஊறவிடவும்", "தெளிக்கும் முன் நீருடன் கலக்கவும்"],
+    },
     apply: { en: "Every 20 days", ta: "20 நாட்களுக்கு ஒருமுறை" },
-    safety: { en: "Store in shade; avoid direct sunlight", ta: "நிழலில் சேமித்து வைக்கவும்" },
-    benefit: { en: "Improves fruit size & quality", ta: "பழ அளவும் தரமும் உயரும்" },
+    safety: { en: "Store in shade", ta: "நிழலில் சேமிக்கவும்" },
+    benefit: { en: "Improves fruit size", ta: "பழ அளவு அதிகரிக்கும்" },
   },
+
   tomato: {
     emoji: "🍅",
     fert: { en: "Jeevamrutham", ta: "ஜீவாமிருதம்" },
-    prep: { en: ["Ferment cow dung mix for 24 hours"], ta: ["22 மணி நேரம் ஊறவிடவும்"] },
+    prep: {
+      en: ["Cow dung mix", "Ferment 24 hours"],
+      ta: ["மாட்டு சாண கலவை", "24 மணி நேரம் ஊறவிடவும்"],
+    },
     apply: { en: "Every 10 days", ta: "10 நாட்களுக்கு ஒருமுறை" },
-    safety: { en: "Wear mask while spraying", ta: "முக கவசம் அணியவும்" },
-    benefit: { en: "Higher yield with better disease resistance", ta: "அதிக மகசூல் மற்றும் நோய் எதிர்ப்பு" },
+    safety: { en: "Wear mask", ta: "முக கவசம் அணியவும்" },
+    benefit: { en: "Better disease resistance", ta: "நோய் எதிர்ப்பு அதிகரிக்கும்" },
   },
+
   groundnut: {
     emoji: "🥜",
     fert: { en: "Vermicompost", ta: "வெர்மி கம்போஸ்ட்" },
-    prep: { en: ["Mix with soil before sowing"], ta: ["விதைப்பதற்கு முன் மண்ணுடன் கலக்கவும்"] },
+    prep: {
+      en: ["Mix before sowing", "Add neem cake"],
+      ta: ["விதைப்பு முன் கலக்கவும்", "வேப்பம் பிண்ணாக்கு சேர்க்கவும்"],
+    },
     apply: { en: "Before sowing", ta: "விதைப்பு முன்" },
-    safety: { en: "Maintain soil moisture", ta: "ஈரப்பதம் பராமரிக்கவும்" },
-    benefit: { en: "Strong root growth & nitrogen fixation", ta: "வேர் வளர்ச்சி மேம்படும்" },
+    safety: { en: "Maintain moisture", ta: "ஈரப்பதம் பராமரிக்கவும்" },
+    benefit: { en: "Strong root growth", ta: "வேர் வளர்ச்சி மேம்படும்" },
   },
+
   cotton: {
     emoji: "🪴",
     fert: { en: "Jeevamrutham", ta: "ஜீவாமிருதம்" },
-    prep: { en: ["Ferment for 24 hours"], ta: ["24 மணி நேரம் ஊறவிடவும்"] },
+    prep: {
+      en: ["Cow dung + jaggery", "Ferment 24 hours"],
+      ta: ["மாட்டு சாணம் + கருப்பட்டி", "24 மணி நேரம் ஊறவிடவும்"],
+    },
     apply: { en: "Every 15 days", ta: "15 நாட்களுக்கு ஒருமுறை" },
-    safety: { en: "Avoid direct sunlight storage", ta: "நேரடி வெயிலில் வைக்காதீர்கள்" },
-    benefit: { en: "Reduces input costs significantly", ta: "உள்ளீடு செலவு குறையும்" },
+    safety: { en: "Avoid sunlight storage", ta: "வெயிலில் வைக்காதீர்கள்" },
+    benefit: { en: "Reduces cost", ta: "செலவு குறையும்" },
   },
+
   sugarcane: {
     emoji: "🌿",
     fert: { en: "Panchagavya", ta: "பஞ்சகவ்யம்" },
-    prep: { en: ["Ferment for 7 days"], ta: ["7 நாட்கள் ஊறவிடவும்"] },
+    prep: {
+      en: ["Ferment 7 days", "Add jaggery"],
+      ta: ["7 நாட்கள் ஊறவிடவும்", "கருப்பட்டி சேர்க்கவும்"],
+    },
     apply: { en: "Every 20 days", ta: "20 நாட்களுக்கு ஒருமுறை" },
     safety: { en: "Keep away from children", ta: "குழந்தைகள் அருகில் வைக்காதீர்கள்" },
-    benefit: { en: "Increases brix/sweetness level", ta: "இனிப்புத்தன்மை உயரும்" },
+    benefit: { en: "Improves sweetness", ta: "இனிப்புத்தன்மை உயரும்" },
+  },
+
+  maize: {
+    emoji: "🌽",
+    fert: { en: "Jeevamrutham", ta: "ஜீவாமிருதம்" },
+    prep: {
+      en: ["Ferment 24 hours", "Mix in irrigation"],
+      ta: ["24 மணி நேரம் ஊறவிடவும்", "நீர்ப்பாசனத்தில் கலக்கவும்"],
+    },
+    apply: { en: "Every 12 days", ta: "12 நாட்களுக்கு ஒருமுறை" },
+    safety: { en: "Spray evening", ta: "மாலையில் தெளிக்கவும்" },
+    benefit: { en: "Improves cob filling", ta: "கதிர் நிரப்பு மேம்படும்" },
+  },
+
+  chilli: {
+    emoji: "🌶️",
+    fert: { en: "Fish Amino Acid", ta: "மீன் அமினோ அமிலம்" },
+    prep: {
+      en: ["Fish waste + jaggery", "Ferment 10 days"],
+      ta: ["மீன் கழிவு + கருப்பட்டி", "10 நாட்கள் ஊறவிடவும்"],
+    },
+    apply: { en: "Every 7 days", ta: "7 நாட்களுக்கு ஒருமுறை" },
+    safety: { en: "Avoid over spraying", ta: "அதிகமாக தெளிக்க வேண்டாம்" },
+    benefit: { en: "Improves flowering", ta: "பூக்கும் திறன் உயரும்" },
+  },
+
+  brinjal: {
+    emoji: "🍆",
+    fert: { en: "Panchagavya", ta: "பஞ்சகவ்யம்" },
+    prep: {
+      en: ["Milk + curd + ghee", "Ferment 7 days"],
+      ta: ["பால் + தயிர் + நெய்", "7 நாட்கள் ஊறவிடவும்"],
+    },
+    apply: { en: "Every 15 days", ta: "15 நாட்களுக்கு ஒருமுறை" },
+    safety: { en: "Use diluted spray", ta: "நீரில் கலந்தே தெளிக்கவும்" },
+    benefit: { en: "Boosts fruit size", ta: "காய் அளவு அதிகரிக்கும்" },
+  },
+
+  coconut: {
+    emoji: "🥥",
+    fert: { en: "Vermicompost", ta: "வெர்மி கம்போஸ்ட்" },
+    prep: {
+      en: ["Apply near root", "Cover with mulch"],
+      ta: ["வேர் பகுதியில் இடவும்", "மூல்சிங் செய்யவும்"],
+    },
+    apply: { en: "Every 30 days", ta: "30 நாட்களுக்கு ஒருமுறை" },
+    safety: { en: "Water after applying", ta: "இட்ட பின் நீர் ஊற்றவும்" },
+    benefit: { en: "Improves nut size", ta: "தேங்காய் அளவு உயரும்" },
+  },
+
+  mango: {
+    emoji: "🥭",
+    fert: { en: "Panchagavya", ta: "பஞ்சகவ்யம்" },
+    prep: {
+      en: ["Ferment 7 days", "Dilute before spray"],
+      ta: ["7 நாட்கள் ஊறவிடவும்", "தெளிக்கும் முன் கலக்கவும்"],
+    },
+    apply: { en: "Every 25 days", ta: "25 நாட்களுக்கு ஒருமுறை" },
+    safety: { en: "Spray morning", ta: "காலை தெளிக்கவும்" },
+    benefit: { en: "Improves fruit sweetness", ta: "பழ இனிப்பு உயரும்" },
+  },
+
+  onion: {
+    emoji: "🧅",
+    fert: { en: "Jeevamrutham", ta: "ஜீவாமிருதம்" },
+    prep: {
+      en: ["Cow dung + jaggery", "Ferment 24 hours"],
+      ta: ["மாட்டு சாணம் + கருப்பட்டி", "24 மணி நேரம் ஊறவிடவும்"],
+    },
+    apply: { en: "Every 10 days", ta: "10 நாட்களுக்கு ஒருமுறை" },
+    safety: { en: "Avoid over watering", ta: "அதிக நீர் விட வேண்டாம்" },
+    benefit: { en: "Improves bulb size", ta: "கிழங்கு அளவு உயரும்" },
   },
 };
 
@@ -69,11 +175,16 @@ export default function NaturalFarming() {
     async function loadNaturalFarming() {
       try {
         const data = await api.get("/content/naturalFarming");
-        setFarmingData(data || fallbackFarmingData);
+
+        setFarmingData({
+          ...fallbackFarmingData,
+          ...(data || {}),
+        });
       } catch {
         setFarmingData(fallbackFarmingData);
       }
     }
+
     loadNaturalFarming();
   }, []);
 
@@ -83,14 +194,13 @@ export default function NaturalFarming() {
   return (
     <Layout title={t ? "இயற்கை வேளாண்மை" : "Natural Farming"}>
       <div style={{ padding: "16px 16px 0" }}>
-
-        {/* Crop Grid */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <p style={{ fontSize: 13, fontWeight: 700, color: "#6B7280", marginBottom: 10, textTransform: "uppercase", letterSpacing: 0.4 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: "#6B7280", marginBottom: 10 }}>
             {t ? "பயிர் தேர்வு" : "Select Crop"}
           </p>
+
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, marginBottom: 16 }}>
-            {crops.map(c => (
+            {crops.map((c) => (
               <motion.button
                 key={c}
                 whileTap={{ scale: 0.9 }}
@@ -99,14 +209,13 @@ export default function NaturalFarming() {
                   padding: "12px 8px",
                   borderRadius: 16,
                   border: selected === c ? "none" : "1.5px solid #E5E7EB",
-                  background: selected === c ? "linear-gradient(135deg, #2F80ED, #27AE60)" : "#fff",
+                  background: selected === c ? "linear-gradient(135deg,#2F80ED,#27AE60)" : "#fff",
                   cursor: "pointer",
-                  boxShadow: selected === c ? "0 4px 14px rgba(47,128,237,0.35)" : "0 2px 6px rgba(0,0,0,0.05)",
                   textAlign: "center",
                 }}
               >
-                <div style={{ fontSize: 24, marginBottom: 4 }}>{farmingData[c].emoji}</div>
-                <p style={{ fontSize: 12, fontWeight: 600, color: selected === c ? "#fff" : "#374151" }}>
+                <div style={{ fontSize: 24 }}>{farmingData[c].emoji}</div>
+                <p style={{ fontSize: 12, fontWeight: 600 }}>
                   {c.charAt(0).toUpperCase() + c.slice(1)}
                 </p>
               </motion.button>
@@ -114,87 +223,39 @@ export default function NaturalFarming() {
           </div>
         </motion.div>
 
-        {/* Info Cards */}
         <AnimatePresence mode="wait">
           {info && (
             <motion.div
               key={selected}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.35 }}
+              exit={{ opacity: 0 }}
               style={{ display: "flex", flexDirection: "column", gap: 10 }}
             >
-              {/* Fertilizer */}
-              <div style={{ background: "#fff", borderRadius: 18, padding: "14px 16px", boxShadow: "0 4px 16px rgba(0,0,0,0.07)", border: "1px solid #E5E7EB" }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#27AE60", marginBottom: 6, textTransform: "uppercase", letterSpacing: 0.3 }}>🌿 {t ? "உரம்" : "Fertilizer"}</p>
-                <p style={{ fontSize: 16, fontWeight: 700, color: "#111827" }}>{t ? info.fert.ta : info.fert.en}</p>
+              <div style={{ background: "#fff", borderRadius: 18, padding: 16 }}>
+                <p>🌿 <b>{t ? info.fert.ta : info.fert.en}</b></p>
               </div>
 
-              {/* Preparation */}
-              <div style={{ background: "#fff", borderRadius: 18, padding: "14px 16px", boxShadow: "0 4px 16px rgba(0,0,0,0.07)", border: "1px solid #E5E7EB" }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#2F80ED", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.3 }}>🧪 {t ? "தயாரிப்பு முறை" : "Preparation"}</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {(t ? info.prep.ta : info.prep.en).map((step, i) => (
-                    <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-                      <div style={{
-                        width: 22, height: 22, borderRadius: 8,
-                        background: "linear-gradient(135deg, #2F80ED, #27AE60)",
-                        color: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: 10, fontWeight: 800, flexShrink: 0,
-                      }}>
-                        {i + 1}
-                      </div>
-                      <p style={{ fontSize: 13, color: "#374151", lineHeight: 1.5, paddingTop: 2 }}>{step}</p>
-                    </div>
-                  ))}
-                </div>
+              <div style={{ background: "#fff", borderRadius: 18, padding: 16 }}>
+                {(t ? info.prep.ta : info.prep.en).map((step, i) => (
+                  <p key={i}>{i + 1}. {step}</p>
+                ))}
               </div>
 
-              {/* Usage, Safety, Benefits */}
-              {[
-                { label: t ? "பயன்பாட்டு அட்டவணை" : "Usage Schedule", val: t ? info.apply.ta : info.apply.en, icon: "📅", bg: "#FEF9C3" },
-                { label: t ? "பாதுகாப்பு" : "Safety", val: t ? info.safety.ta : info.safety.en, icon: "⚠️", bg: "#FFF5F5" },
-                { label: t ? "பயன்கள்" : "Benefits", val: t ? info.benefit.ta : info.benefit.en, icon: "✅", bg: "#EDFBF1" },
-              ].map(({ label, val, icon, bg }) => (
-                <div key={label} style={{ background: bg, borderRadius: 16, padding: "14px 16px", border: "1px solid rgba(0,0,0,0.06)" }}>
-                  <p style={{ fontSize: 11, fontWeight: 700, color: "#374151", marginBottom: 4, textTransform: "uppercase", letterSpacing: 0.3 }}>{icon} {label}</p>
-                  <p style={{ fontSize: 13, color: "#374151", fontWeight: 500, lineHeight: 1.5 }}>{val}</p>
-                </div>
-              ))}
-
-              {/* Natural vs Chemical */}
-              <div style={{ background: "#fff", borderRadius: 18, padding: "14px 16px", boxShadow: "0 4px 16px rgba(0,0,0,0.07)", border: "1px solid #E5E7EB", marginBottom: 8 }}>
-                <p style={{ fontSize: 11, fontWeight: 700, color: "#374151", marginBottom: 8, textTransform: "uppercase", letterSpacing: 0.3 }}>⚖️ {t ? "இயற்கை vs ரசாயனம்" : "Natural vs Chemical"}</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  <div style={{ display: "flex", gap: 8, alignItems: "center", padding: "8px 10px", background: "#EDFBF1", borderRadius: 10 }}>
-                    <span style={{ fontSize: 16 }}>✅</span>
-                    <span style={{ fontSize: 13, color: "#065F46", fontWeight: 500 }}>{t ? "மண் ஆரோக்கியம் உயரும்" : "Improves long-term soil health"}</span>
-                  </div>
-                  <div style={{ display: "flex", gap: 8, alignItems: "center", padding: "8px 10px", background: "#FEF9C3", borderRadius: 10 }}>
-                    <span style={{ fontSize: 16 }}>🚫</span>
-                    <span style={{ fontSize: 13, color: "#92400E", fontWeight: 500 }}>{t ? "ரசாயன எச்சம் இல்லை" : "Zero chemical residue"}</span>
-                  </div>
-                  <div style={{ display: "flex", gap: 8, alignItems: "center", padding: "8px 10px", background: "#EBF4FF", borderRadius: 10 }}>
-                    <span style={{ fontSize: 16 }}>💰</span>
-                    <span style={{ fontSize: 13, color: "#1D4ED8", fontWeight: 500 }}>{t ? "செலவு 40% குறையும்" : "Up to 40% cost reduction"}</span>
-                  </div>
-                </div>
+              <div style={{ background: "#FEF9C3", borderRadius: 16, padding: 16 }}>
+                📅 {t ? info.apply.ta : info.apply.en}
               </div>
 
+              <div style={{ background: "#FFF5F5", borderRadius: 16, padding: 16 }}>
+                ⚠️ {t ? info.safety.ta : info.safety.en}
+              </div>
+
+              <div style={{ background: "#EDFBF1", borderRadius: 16, padding: 16 }}>
+                ✅ {t ? info.benefit.ta : info.benefit.en}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
-
-        {!selected && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ textAlign: "center", padding: "32px 20px", color: "#9CA3AF" }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>🌿</div>
-            <p style={{ fontSize: 14 }}>
-              {t ? "மேலே பயிர் தேர்வு செய்து இயற்கை வேளாண்மை ஆலோசனை பெறுங்கள்" : "Select a crop above to get organic farming guidance"}
-            </p>
-          </motion.div>
-        )}
-
       </div>
     </Layout>
   );
