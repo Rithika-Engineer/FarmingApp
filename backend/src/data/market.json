@@ -1,0 +1,143 @@
+{
+  "prices": {
+    "Paddy": {
+      "Chennai": {
+        "min": 18,
+        "max": 26,
+        "trend": "up"
+      },
+      "Madurai": {
+        "min": 17,
+        "max": 25,
+        "trend": "stable"
+      },
+      "Trichy": {
+        "min": 19,
+        "max": 27,
+        "trend": "up"
+      },
+      "Coimbatore": {
+        "min": 18,
+        "max": 26,
+        "trend": "down"
+      },
+      "Salem": {
+        "min": 17,
+        "max": 24,
+        "trend": "stable"
+      },
+      "Thanjavur": {
+        "min": 20,
+        "max": 28,
+        "trend": "up"
+      },
+      "Erode": {
+        "min": 18,
+        "max": 26,
+        "trend": "stable"
+      },
+      "Tirunelveli": {
+        "min": 17,
+        "max": 25,
+        "trend": "down"
+      },
+      "Villupuram": {
+        "min": 19,
+        "max": 27,
+        "trend": "up"
+      },
+      "Dindigul": {
+        "min": 18,
+        "max": 26,
+        "trend": "stable"
+      }
+    },
+    "Banana": {
+      "Chennai": {
+        "min": 12,
+        "max": 18,
+        "trend": "up"
+      },
+      "Madurai": {
+        "min": 10,
+        "max": 16,
+        "trend": "stable"
+      },
+      "Trichy": {
+        "min": 11,
+        "max": 17,
+        "trend": "up"
+      },
+      "Coimbatore": {
+        "min": 13,
+        "max": 19,
+        "trend": "down"
+      },
+      "Salem": {
+        "min": 12,
+        "max": 18,
+        "trend": "stable"
+      }
+    },
+    "Groundnut": {
+      "Chennai": {
+        "min": 50,
+        "max": 72,
+        "trend": "up"
+      },
+      "Madurai": {
+        "min": 48,
+        "max": 70,
+        "trend": "stable"
+      },
+      "Trichy": {
+        "min": 52,
+        "max": 75,
+        "trend": "up"
+      }
+    },
+    "Tomato": {
+      "Chennai": {
+        "min": 15,
+        "max": 30,
+        "trend": "down"
+      },
+      "Madurai": {
+        "min": 12,
+        "max": 28,
+        "trend": "down"
+      },
+      "Trichy": {
+        "min": 14,
+        "max": 29,
+        "trend": "stable"
+      }
+    },
+    "Onion": {
+      "Chennai": {
+        "min": 20,
+        "max": 40,
+        "trend": "up"
+      },
+      "Madurai": {
+        "min": 18,
+        "max": 38,
+        "trend": "up"
+      },
+      "Trichy": {
+        "min": 19,
+        "max": 39,
+        "trend": "stable"
+      }
+    }
+  },
+  "weekly": [
+    20,
+    22,
+    21,
+    23,
+    24,
+    25,
+    26
+  ]
+}

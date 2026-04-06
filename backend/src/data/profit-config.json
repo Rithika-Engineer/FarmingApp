@@ -1,0 +1,26 @@
+{
+  "cropList": [
+    "Paddy",
+    "Maize",
+    "Cotton",
+    "Groundnut"
+  ],
+  "marketPrice": {
+    "Paddy": {
+      "min": 18,
+      "max": 24
+    },
+    "Maize": {
+      "min": 16,
+      "max": 22
+    },
+    "Cotton": {
+      "min": 55,
+      "max": 70
+    },
+    "Groundnut": {
+      "min": 45,
+      "max": 60
+    }
+  }
+}
